@@ -3,9 +3,8 @@ import pandas as pd
 
 def main():
     
-    #Isso é só para a aba o navegador ficar com nome e icone personalizados
-    st.set_page_config(page_title="Vinicola", page_icon=":wine_glass:", layout="wide", initial_sidebar_state="collapsed")
-
+    # Injetar o estilo na aplicação
+    st.markdown(page_bg, unsafe_allow_html=True)
     
     #Aqui é o titulo do nosso dataset e alguns tipos de textos para usar no dataset
     st.title("Análise de qualidade de vinhos")
@@ -22,24 +21,45 @@ def main():
     try:
         df = pd.read_csv(dataset_caminho)
 
-        # Exibir o DataFrame no Streamlit
+        # Isso exibe o DataFrame no Streamlit, e caso tenha algum erro ele vai mostrar a linha
         st.write("Dados do Dataset:")
         st.dataframe(df)
     except Exception as e:
         st.error(f"Ocorreu um erro ao ler o arquivo: {e}")
         
-        
-    #Barra lateral com os filtros
-    
+
+
     st.markdown("---") #divisoria
     
+    
+    
+    #Barra lateral com os filtros
     st.sidebar.title("Local para Aplicar Filtros")
     
+    # filtro de arrastar que o usuário usa pra selecionar o valor mínimo de pH
     ph = st.sidebar.slider("Seleciona o PH minimo:", min_value=0.0, max_value=14.0, value=3.0, step=0.1)
     
-    df.selecionado= df.query("pH >= @ph")
+    alcool=st.sidebar.slider("Seleciona o teor alcoolico maximo:", min_value=0.0, max_value=15.0, value=9.0, step=0.1)
+    
+    
+    # Filtrar dados do DataFrame com base no valor de pH selecionado
+    df.selecionado= df.query("pH >= @ph and alcohol <= @alcool") 
+    
     
     st.dataframe(df.selecionado)
+    
+    
+    # Criar um gráfico de colunas da quantidade de vinhos por qualidade
+    st.markdown("---")  # divisória
+    st.subheader("Distribuição da Qualidade dos Vinhos")
+
+    # Contar a quantidade de vinhos por qualidade
+    qualidade_counts = df['quality'].value_counts()
+
+    # Exibir o gráfico de barras usando Streamlit
+    st.bar_chart(qualidade_counts)
+    
+    st.write(df.describe())
     
 if __name__ == "__main__":
     main()
