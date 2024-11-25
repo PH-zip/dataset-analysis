@@ -3,8 +3,6 @@ import pandas as pd
 
 def main():
     
-    # Injetar o estilo na aplicação
-    st.markdown(page_bg, unsafe_allow_html=True)
     
     #Aqui é o titulo do nosso dataset e alguns tipos de textos para usar no dataset
     st.title("Análise de qualidade de vinhos")
