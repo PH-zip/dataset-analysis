@@ -12,7 +12,7 @@ def main():
     st.markdown("---") #divisoria
     
     # Caminho para o seu arquivo CSV
-    dataset_caminho = 'D:\PH\GitHub\dataset-analysis\winequality-red.csv'  # Substitua pelo caminho do seu arquivo CSV
+    dataset_caminho = 'D:\PH\GitHub\dataset-analysis\Data\winequality-red.csv'  # Substitua pelo caminho do seu arquivo CSV
 
 
     # Ler o arquivo CSV usando pandas
