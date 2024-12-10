@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+from csv_to_parquet import conversor
 
 def main():
     # Configurações da aba
@@ -14,13 +15,13 @@ def main():
     st.title("Análise de Qualidade de Vinhos")
     st.markdown("---")  # Divisória
 
-    # Caminho para o seu arquivo CSV
-    dataset_caminho = 'C:/Users/ianli/OneDrive/Área de Trabalho/projeto 3/dataset-analysis/Data/winequality-red.csv'  # Substitua pelo caminho correto
+    # Caminho para o seu arquivo CSV e parquet
+    dataset_caminho = conversor(R'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\winequality-red.csv' , R'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\dataset.parquet')  # Substitua pelo caminho correto
 
-    # Ler o arquivo CSV usando pandas
+    # Ler o arquivo parquet usando pandas
     try:
-        df = pd.read_csv(dataset_caminho)
-        st.write("### Dados do Dataset")
+        df = pd.read_parquet(dataset_caminho)
+        st.write(f"### Dados do Dataset ({len(df)} linhas)")
         st.dataframe(df)
     except Exception as e:
         st.error(f"Ocorreu um erro ao tentar ler o arquivo: {e}")
@@ -30,8 +31,8 @@ def main():
 
     # Barra lateral com filtros
     st.sidebar.title("Local para Aplicar Filtros")
-    ph = st.sidebar.slider("Seleciona o pH mínimo:", min_value=0.0, max_value=14.0, value=3.0, step=0.1)
-    alcool = st.sidebar.slider("Seleciona o teor alcoólico máximo:", min_value=0.0, max_value=15.0, value=9.0, step=0.1)
+    ph = st.sidebar.slider("Seleciona o pH mínimo:", min_value=2.74, max_value=4.01, value=2.74, step=0.1)
+    alcool = st.sidebar.slider("Seleciona o teor alcoólico máximo:", min_value=8.4, max_value=15.0, value=15.0, step=0.1)
 
     # Filtrar os dados
     df_selecionado = df.query("pH >= @ph and alcohol <= @alcool")
