@@ -55,6 +55,10 @@ def main():
     (df['pH'] >= ph_min) & (df['pH'] <= ph_max) &
     (df['alcohol'] >= alcohol_min) & (df['alcohol'] <= alcohol_max)
 ]
+    #botao de apenas vinhos secos
+    somente_vinhos_secos = st.sidebar.checkbox("Apenas vinhos secos")
+    if somente_vinhos_secos:
+     df_selecionado = df_selecionado[df_selecionado['residual sugar'] <= 4]
 
 # Exibir os dados filtrados
     st.write(f"### Dados Filtrados ({len(df_selecionado)} linhas)")
