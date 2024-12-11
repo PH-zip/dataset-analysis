@@ -31,11 +31,32 @@ def main():
 
     # Barra lateral com filtros
     st.sidebar.title("Local para Aplicar Filtros")
-    ph = st.sidebar.slider("Seleciona o pH mínimo:", min_value=2.74, max_value=4.01, value=2.74, step=0.1)
-    alcool = st.sidebar.slider("Seleciona o teor alcoólico máximo:", min_value=8.4, max_value=15.0, value=15.0, step=0.1)
 
-    # Filtrar os dados
-    df_selecionado = df.query("pH >= @ph and alcohol <= @alcool")
+# Slider para selecionar intervalo de pH
+    ph_min, ph_max = st.sidebar.slider(
+    "Selecione o intervalo de pH:",
+    min_value=2.74,  # Valor mínimo permitido
+    max_value=4.01,  # Valor máximo permitido
+    value=(2.74, 4.01),  # Intervalo inicial como tupla (min, max)
+    step=0.1
+)
+
+# Slider para selecionar intervalo de teor alcoólico
+    alcohol_min, alcohol_max = st.sidebar.slider(
+    "Selecione o intervalo de teor alcoólico:",
+    min_value=8.4,  # Valor mínimo permitido
+    max_value=15.0,  # Valor máximo permitido
+    value=(8.4, 15.0),  # Intervalo inicial como tupla (min, max)
+    step=0.1
+)
+
+# Aplicar o filtro no DataFrame usando os intervalos
+    df_selecionado = df[
+    (df['pH'] >= ph_min) & (df['pH'] <= ph_max) &
+    (df['alcohol'] >= alcohol_min) & (df['alcohol'] <= alcohol_max)
+]
+
+# Exibir os dados filtrados
     st.write(f"### Dados Filtrados ({len(df_selecionado)} linhas)")
     st.dataframe(df_selecionado)
 
@@ -79,4 +100,4 @@ def main():
     st.bar_chart(contagem)
 
 if __name__ == '__main__':
-    main()
+    main() 
