@@ -59,6 +59,11 @@ def main():
     somente_vinhos_secos = st.sidebar.checkbox("Apenas vinhos secos")
     if somente_vinhos_secos:
      df_selecionado = df_selecionado[df_selecionado['residual sugar'] <= 4]
+    
+    somente_vinhos_demisec = st.sidebar.checkbox("Apenas vinhos meio secos(demi-sec)")
+    if somente_vinhos_demisec:
+       df_selecionado = df_selecionado[(df_selecionado['residual sugar'] > 4) & (df_selecionado['residual sugar'] < 25)]
+
 
 # Exibir os dados filtrados
     st.write(f"### Dados Filtrados ({len(df_selecionado)} linhas)")
