@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from csv_to_parquet import conversor
-
+from leitor_df import leitor
 def main():
     # Configurações da aba
     st.set_page_config(
@@ -12,22 +12,15 @@ def main():
     )
 
     # Título e introdução
-    st.title("Análise de Qualidade de Vinhos")
-    st.markdown("---")  # Divisória
+    st.title("Análise da Qualidade de Vinhos: Explorando correlacao entre variaveis")
 
     # Caminho para o seu arquivo CSV e parquet
-    dataset_caminho = conversor(R'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\winequality-red.csv' , R'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\dataset.parquet')  # Substitua pelo caminho correto
-
-    # Ler o arquivo parquet usando pandas
-    try:
-        df = pd.read_parquet(dataset_caminho)
-        st.write(f"### Dados do Dataset ({len(df)} linhas)")
-        st.dataframe(df)
-    except Exception as e:
-        st.error(f"Ocorreu um erro ao tentar ler o arquivo: {e}")
-        return  # Sai da função se houver erro no carregamento
-
-    st.markdown("---")
+    red_path = conversor(R'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\winequality-red.csv' , R'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\red.parquet')  # Substitua pelo caminho do seu pc
+    white_path = conversor(R'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\winequality-white.csv', R'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\white.parquet')# Substitua pelo caminho do seu pc
+    
+    # Ler o arquivo parquet
+    df_red = leitor(red_path)
+    df_white = leitor(white_path)
 
     # Barra lateral com filtros
     st.sidebar.title("Local para Aplicar Filtros")
@@ -51,18 +44,21 @@ def main():
 )
 
 # Aplicar o filtro no DataFrame usando os intervalos
-    df_selecionado = df[
-    (df['pH'] >= ph_min) & (df['pH'] <= ph_max) &
-    (df['alcohol'] >= alcohol_min) & (df['alcohol'] <= alcohol_max)
+    df_selecionado = df_red[
+    (df_red['pH'] >= ph_min) & (df_red['pH'] <= ph_max) &
+    (df_red['alcohol'] >= alcohol_min) & (df_red['alcohol'] <= alcohol_max)
 ]
-    #botao de apenas vinhos secos
-    somente_vinhos_secos = st.sidebar.checkbox("Apenas vinhos secos")
-    if somente_vinhos_secos:
-     df_selecionado = df_selecionado[df_selecionado['residual sugar'] <= 4]
+    #botao de apenas vinhos tintos
+    somente_vinhos_tintos = st.sidebar.checkbox("Apenas vinhos tintos")
+    if somente_vinhos_tintos:
+     df_selecionado = df_red
 
-# Exibir os dados filtrados
-    st.write(f"### Dados Filtrados ({len(df_selecionado)} linhas)")
-    st.dataframe(df_selecionado)
+    #botao vinhos brancos
+    somente_vinhos_brancos = st.sidebar.checkbox("Apenas vinhos brancos")
+    if somente_vinhos_brancos:
+       df_selecionado = df_white
+        
+
 
     # Gráfico de barras - Distribuição da qualidade
     st.markdown("---")
@@ -74,12 +70,12 @@ def main():
     ax.set_ylabel('Quantidade')
     st.pyplot(fig)
 
-    # Gráfico de dispersão - pH vs álcool
+    # Gráfico de dispersão - pH vs qualidade
     st.markdown("---")
-    st.subheader("Gráfico de Dispersão: pH vs Teor Alcoólico")
+    st.subheader("Gráfico de Dispersão: pH vs Qualidade")
     fig, ax = plt.subplots()
     ax.set_facecolor('lightgray')  # Fundo do gráfico
-    sns.scatterplot(data=df_selecionado, x='pH', y='alcohol', ax=ax, color='darkred')
+    sns.scatterplot(data=df_selecionado, x='pH', y='quality', ax=ax, color='darkred')
     st.pyplot(fig)
 
     # Boxplot - Teor alcoólico por qualidade
@@ -99,9 +95,11 @@ def main():
     # Distribuição de variáveis
     st.markdown("---")
     st.subheader("Distribuição de Variáveis")
-    coluna = st.selectbox("Selecione a coluna para análise", options=df.columns)
+    coluna = st.selectbox("Selecione a coluna para análise", options=df_red.columns)
     contagem = df_selecionado[coluna].value_counts().sort_index()
     st.bar_chart(contagem)
+
+    
 
 if __name__ == '__main__':
     main() 
