@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from csv_to_parquet import conversor
 
+# Função principal
 def main():
     # Configurações da aba
     st.set_page_config(
@@ -15,14 +16,20 @@ def main():
     st.title("Análise de Qualidade de Vinhos")
     st.markdown("---")  # Divisória
 
-    # Caminho para o seu arquivo CSV e parquet
-    dataset_caminho = conversor(R'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\winequality-red.csv' , R'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\dataset.parquet')  # Substitua pelo caminho correto
+    # Caminho para o arquivo CSV e parquet
+    dataset_caminho = conversor(
+        R'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\winequality-red.csv', 
+        R'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\dataset.parquet'
+    )
 
     # Ler o arquivo parquet usando pandas
     try:
         df = pd.read_parquet(dataset_caminho)
         st.write(f"### Dados do Dataset ({len(df)} linhas)")
         st.dataframe(df)
+    except FileNotFoundError:
+        st.error("Arquivo não encontrado. Verifique o caminho.")
+        return
     except Exception as e:
         st.error(f"Ocorreu um erro ao tentar ler o arquivo: {e}")
         return  # Sai da função se houver erro no carregamento
@@ -30,37 +37,38 @@ def main():
     st.markdown("---")
 
     # Barra lateral com filtros
-    st.sidebar.title("Local para Aplicar Filtros")
+    st.sidebar.title("Aplicar Filtros")
 
-# Slider para selecionar intervalo de pH
+    # Slider para selecionar intervalo de pH
     ph_min, ph_max = st.sidebar.slider(
-    "Selecione o intervalo de pH:",
-    min_value=2.74,  # Valor mínimo permitido
-    max_value=4.01,  # Valor máximo permitido
-    value=(2.74, 4.01),  # Intervalo inicial como tupla (min, max)
-    step=0.1
-)
+        "Selecione o intervalo de pH:",
+        min_value=2.74,  # Valor mínimo permitido
+        max_value=4.01,  # Valor máximo permitido
+        value=(2.74, 4.01),  # Intervalo inicial
+        step=0.1
+    )
 
-# Slider para selecionar intervalo de teor alcoólico
+    # Slider para selecionar intervalo de teor alcoólico
     alcohol_min, alcohol_max = st.sidebar.slider(
-    "Selecione o intervalo de teor alcoólico:",
-    min_value=8.4,  # Valor mínimo permitido
-    max_value=15.0,  # Valor máximo permitido
-    value=(8.4, 15.0),  # Intervalo inicial como tupla (min, max)
-    step=0.1
-)
+        "Selecione o intervalo de teor alcoólico:",
+        min_value=8.4,  # Valor mínimo permitido
+        max_value=15.0,  # Valor máximo permitido
+        value=(8.4, 15.0),  # Intervalo inicial
+        step=0.1
+    )
 
-# Aplicar o filtro no DataFrame usando os intervalos
+    # Aplicar o filtro no DataFrame usando os intervalos
     df_selecionado = df[
-    (df['pH'] >= ph_min) & (df['pH'] <= ph_max) &
-    (df['alcohol'] >= alcohol_min) & (df['alcohol'] <= alcohol_max)
-]
-    #botao de apenas vinhos secos
+        (df['pH'] >= ph_min) & (df['pH'] <= ph_max) &
+        (df['alcohol'] >= alcohol_min) & (df['alcohol'] <= alcohol_max)
+    ]
+
+    # Filtrar apenas vinhos secos
     somente_vinhos_secos = st.sidebar.checkbox("Apenas vinhos secos")
     if somente_vinhos_secos:
-     df_selecionado = df_selecionado[df_selecionado['residual sugar'] <= 4]
+        df_selecionado = df_selecionado[df_selecionado['residual sugar'] <= 4]
 
-# Exibir os dados filtrados
+    # Exibir os dados filtrados
     st.write(f"### Dados Filtrados ({len(df_selecionado)} linhas)")
     st.dataframe(df_selecionado)
 
