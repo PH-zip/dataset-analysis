@@ -22,6 +22,25 @@ def main():
     df_red = leitor(red_path)
     df_white = leitor(white_path)
 
+    #Renomeando as colunas para facilitar a análise
+    novos_nomes = {
+        "fixed acidity": "Acidez fixa",
+        "volatile acidity": "Acidez volátil",
+        "citric acid": "Ácido cítrico",
+        "residual sugar": "Açúcar residual",
+        "chlorides": "Cloretos",
+        "free sulfur dioxide": "Dióxido de enxofre livre",
+        "total sulfur dioxide": "Dióxido de enxofre total",
+        "density": "Densidade",
+        "pH": "pH",
+        "sulphates": "Sulfatos",
+        "alcohol": "Álcool",
+        "quality": "Qualidade"}
+    df_red.rename(columns=novos_nomes, inplace=True)
+    df_white.rename(columns=novos_nomes,inplace=True)
+    st.write(f"### Dados do Dataset ({len(df_red)} linhas)")
+    st.dataframe(df_red)
+
     # Barra lateral com filtros
     st.sidebar.title("Local para Aplicar Filtros")
 
