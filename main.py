@@ -32,18 +32,18 @@ def main():
 
     #Renomeando as colunas para facilitar a análise
     novos_nomes = {
-        "fixed acidity": "Acidez fixa",
-        "volatile acidity": "Acidez volátil",
-        "citric acid": "Ácido cítrico",
-        "residual sugar": "Açúcar residual",
-        "chlorides": "Cloretos",
-        "free sulfur dioxide": "Dióxido de enxofre livre",
-        "total sulfur dioxide": "Dióxido de enxofre total",
-        "density": "Densidade",
+        "acidez fixa": "Acidez fixa",
+        "acidez volátil": "Acidez volátil",
+        "ácido cítrico": "Ácido cítrico",
+        "açúcar residual": "Açúcar residual",
+        "cloretos": "Cloretos",
+        "dióxido de enxofre livre": "Dióxido de enxofre livre",
+        "dióxido de enxofre total": "Dióxido de enxofre total",
+        "densidade": "Densidade",
         "pH": "pH",
-        "sulphates": "Sulfatos",
-        "alcohol": "Álcool",
-        "quality": "Qualidade"}
+        "sulfatos": "Sulfatos",
+        "álcool": "Álcool",
+        "qualidade": "Qualidade"}
     df.rename(columns=novos_nomes, inplace=True)
 
     st.write(f"### Dados do Dataset ({len(df)} linhas)")
