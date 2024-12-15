@@ -3,7 +3,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from csv_to_parquet import conversor
-from leitor_df import leitor
 def main():
     # Configurações da aba
     st.set_page_config(
@@ -16,11 +15,11 @@ def main():
 
     # Caminho para o seu arquivo CSV e parquet
     red_path = conversor(R'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\winequality-red.csv' , R'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\red.parquet')  # Substitua pelo caminho do seu pc
-    white_path = conversor(R'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\winequality-white.csv', R'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\white.parquet')# Substitua pelo caminho do seu pc
+    white_path = conversor(R'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\df_white.csv', R'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\white.parquet')# Substitua pelo caminho do seu pc
     
     # Ler o arquivo parquet
-    df_red = leitor(red_path)
-    df_white = leitor(white_path)
+    df_red = pd.read_parquet(red_path)
+    df_white = pd.read_parquet(white_path) 
 
     #Renomeando as colunas para facilitar a análise
     novos_nomes = {
@@ -39,7 +38,7 @@ def main():
     df_red.rename(columns=novos_nomes, inplace=True)
     df_white.rename(columns=novos_nomes,inplace=True)
     st.write(f"### Dados do Dataset ({len(df_red)} linhas)")
-    st.dataframe(df_red)
+    st.dataframe(df_white)
 
     # Barra lateral com filtros
     st.sidebar.title("Local para Aplicar Filtros")
@@ -65,7 +64,7 @@ def main():
 # Aplicar o filtro no DataFrame usando os intervalos
     df_selecionado = df_red[
     (df_red['pH'] >= ph_min) & (df_red['pH'] <= ph_max) &
-    (df_red['alcohol'] >= alcohol_min) & (df_red['alcohol'] <= alcohol_max)
+    (df_red['Álcool'] >= alcohol_min) & (df_red['Álcool'] <= alcohol_max)
 ]
     #botao de apenas vinhos tintos
     somente_vinhos_tintos = st.sidebar.checkbox("Apenas vinhos tintos")
@@ -82,7 +81,7 @@ def main():
     # Gráfico de barras - Distribuição da qualidade
     st.markdown("---")
     st.subheader("Distribuição com base na Qualidade dos Vinhos")
-    qualidade_counts = df_selecionado['quality'].value_counts().sort_index()
+    qualidade_counts = df_selecionado['Qualidade'].value_counts().sort_index()
     fig, ax = plt.subplots()
     qualidade_counts.plot(kind='bar', color='darkred', ax=ax)
     ax.set_xlabel('Qualidade')
@@ -94,14 +93,14 @@ def main():
     st.subheader("Gráfico de Dispersão: pH vs Qualidade")
     fig, ax = plt.subplots()
     ax.set_facecolor('lightgray')  # Fundo do gráfico
-    sns.scatterplot(data=df_selecionado, x='pH', y='quality', ax=ax, color='darkred')
+    sns.scatterplot(data=df_selecionado, x='pH', y='Qualidade', ax=ax, color='darkred')
     st.pyplot(fig)
 
     # Boxplot - Teor alcoólico por qualidade
     st.markdown("---")
     st.subheader("Boxplot do Teor Alcoólico por Qualidade")
     fig, ax = plt.subplots(figsize=(10, 6))
-    sns.boxplot(data=df_selecionado, x='quality', y='alcohol', palette='Set2', ax=ax)
+    sns.boxplot(data=df_selecionado, x='Qualidade', y='Álcool', palette='Set2', ax=ax)
     ax.set_xlabel('Qualidade')
     ax.set_ylabel('Teor Alcoólico')
     st.pyplot(fig)
