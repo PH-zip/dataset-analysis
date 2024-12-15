@@ -14,12 +14,22 @@ def main():
     st.title("Análise da Qualidade de Vinhos: Explorando correlacao entre variaveis")
 
     # Caminho para o seu arquivo CSV e parquet
-    red_path = conversor(R'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\winequality-red.csv' , R'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\red.parquet')  # Substitua pelo caminho do seu pc
-    white_path = conversor(R'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\df_white.csv', R'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\white.parquet')# Substitua pelo caminho do seu pc
-    
-    # Ler o arquivo parquet
-    df_red = pd.read_parquet(red_path)
-    df_white = pd.read_parquet(white_path) 
+    red = conversor(R'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\winequality-red.csv' , R'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\red.parquet')  # Substitua pelo caminho do seu pc
+    white = conversor(R'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\df_white.csv', R'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\white.parquet')# Substitua pelo caminho do seu pc
+    #ler arquivos parquet
+    df_white = pd.read_parquet(white)
+    combined_df = pd.read_parquet(red)
+
+    # Adicionar a coluna 'wine_type'
+    df_white['wine_type'] = 'white'
+    combined_df['wine_type'] = 'red'
+
+    # Unir os dois datasets
+    combined_df = pd.concat([df_white, combined_df], axis=0).reset_index(drop=True)
+
+    # Salvar o novo dataset combinado
+    combined_df.to_csv('winequality_combined.csv', index=False)
+     
 
     #Renomeando as colunas para facilitar a análise
     novos_nomes = {
@@ -35,10 +45,9 @@ def main():
         "sulphates": "Sulfatos",
         "alcohol": "Álcool",
         "quality": "Qualidade"}
-    df_red.rename(columns=novos_nomes, inplace=True)
+    
+    combined_df.rename(columns=novos_nomes, inplace=True)
     df_white.rename(columns=novos_nomes,inplace=True)
-    st.write(f"### Dados do Dataset ({len(df_red)} linhas)")
-    st.dataframe(df_white)
 
     # Barra lateral com filtros
     st.sidebar.title("Local para Aplicar Filtros")
@@ -60,21 +69,24 @@ def main():
     value=(8.4, 15.0),  # Intervalo inicial como tupla (min, max)
     step=0.1
 )
-
 # Aplicar o filtro no DataFrame usando os intervalos
-    df_selecionado = df_red[
-    (df_red['pH'] >= ph_min) & (df_red['pH'] <= ph_max) &
-    (df_red['Álcool'] >= alcohol_min) & (df_red['Álcool'] <= alcohol_max)
+    df_selecionado = combined_df[
+    (combined_df['pH'] >= ph_min) & (combined_df['pH'] <= ph_max) &
+    (combined_df['Álcool'] >= alcohol_min) & (combined_df['Álcool'] <= alcohol_max)
 ]
     #botao de apenas vinhos tintos
     somente_vinhos_tintos = st.sidebar.checkbox("Apenas vinhos tintos")
     if somente_vinhos_tintos:
-     df_selecionado = df_red
+     df_selecionado = combined_df
 
     #botao vinhos brancos
     somente_vinhos_brancos = st.sidebar.checkbox("Apenas vinhos brancos")
     if somente_vinhos_brancos:
        df_selecionado = df_white
+
+    # imprimindo dados do dataset
+    st.write(f"### Dados do Dataset ({len(combined_df)} linhas)")
+    st.dataframe(combined_df)
         
 
 
@@ -113,7 +125,7 @@ def main():
     # Distribuição de variáveis
     st.markdown("---")
     st.subheader("Distribuição de Variáveis")
-    coluna = st.selectbox("Selecione a coluna para análise", options=df_red.columns)
+    coluna = st.selectbox("Selecione a coluna para análise", options= combined_df.columns)
     contagem = df_selecionado[coluna].value_counts().sort_index()
     st.bar_chart(contagem)
 
