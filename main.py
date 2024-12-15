@@ -28,7 +28,11 @@ def main():
     combined_df = pd.concat([df_white, combined_df], axis=0).reset_index(drop=True)
 
     # Salvar o novo dataset combinado
-    combined_df.to_csv('winequality_combined.csv', index=False)
+    combined_df.to_csv('winequality_combined.csv', index= False)
+
+    # Remover a coluna 'Unnamed: 0' caso exista
+    if 'Unnamed: 0' in combined_df.columns:
+      combined_df = combined_df.drop(columns=['Unnamed: 0'])
      
 
     #Renomeando as colunas para facilitar a análise
@@ -125,9 +129,14 @@ def main():
     # Distribuição de variáveis
     st.markdown("---")
     st.subheader("Distribuição de Variáveis")
-    coluna = st.selectbox("Selecione a coluna para análise", options= combined_df.columns)
-    contagem = df_selecionado[coluna].value_counts().sort_index()
-    st.bar_chart(contagem)
+    coluna = st.selectbox("Selecione a coluna para análise", options=combined_df.columns)
+
+    # Calcular a contagem
+    contagem = df_selecionado[coluna].value_counts().reset_index()
+    contagem.columns = [coluna, 'count']  # Renomeia as colunas
+
+    # Exibir o gráfico
+    st.bar_chart(contagem.set_index(coluna)['count'])
 
     
 
