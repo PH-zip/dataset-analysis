@@ -163,4 +163,4 @@ def main():
     st.bar_chart(contagem.set_index(coluna)['count'])
 
 if __name__ == '__main__':
-    main()
+    main() 
