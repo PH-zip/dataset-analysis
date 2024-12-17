@@ -216,6 +216,22 @@ def main():
     ax.set_ylabel('Teor Alcoólico')
     st.pyplot(fig)
 
+    # Gráfico de linhas - Densidade x Qualidade
+    st.markdown("---")
+    st.subheader("Densidade x Qualidade")
+
+    # Agrupar e calcular a média
+    so2_df = df_selecionado.groupby(['Qualidade', 'tipo_vinho'])['Dióxido de enxofre livre'].mean().unstack()
+
+    # Criar o gráfico de linhas
+    fig, ax = plt.subplots(figsize=(10, 6))
+    so2_df.plot(kind='line', marker='o', color={'Branco': 'lightgray', 'Tinto': 'darkred'}, ax=ax)
+    ax.set_xlabel('Qualidade')
+    ax.set_ylabel('Densidade')
+    ax.set_title('Média da densidade por qualidade e Tipo de Vinho')
+    ax.legend(title='Tipo de Vinho', labels=['Branco', 'Tinto'])
+    st.pyplot(fig)
+
     # Estatísticas descritivas
     st.markdown("---")
     st.subheader("Estatísticas Descritivas")
