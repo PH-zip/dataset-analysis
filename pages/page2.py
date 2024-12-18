@@ -102,6 +102,8 @@ def main():
     ax.set_xlabel("Qualidade")
     ax.set_ylabel("pH")
     st.pyplot(fig)
+    st.caption("Vinhos Tintos: um pH mais baixo está associado a uma qualidade percebida como mais alta")
+    st.caption("Vinhos Brancos: um pH mais alto pode estar relacionado a uma qualidade percebida como mais alta")
 
     # Gráfico de linha - Açúcar Residual vs Qualidade
     st.markdown("---")
@@ -117,6 +119,9 @@ def main():
     ax.set_xlabel("Qualidade")
     ax.set_ylabel("Açúcar Residual")
     st.pyplot(fig)  
+    st.caption("Vinhos Tintos: o acucar residual tende a se manter estavel nao afetando muito na percepção de qualidade")
+    st.caption("Vinhos Brancos: a percepção de qualidade pode estar relacionada a niveis moderados de acucar , porem tentendo a diminuir conforme a qualidade aumenta ")
+    
 
     # Gráfico de linhas - Dióxido de Enxofre Livre x Qualidade
     st.markdown("---")
@@ -133,6 +138,8 @@ def main():
     ax.set_title('Média do Dióxido de Enxofre Livre por Qualidade e Tipo de Vinho')
     ax.legend(title='Tipo de Vinho', labels=['Branco', 'Tinto'])
     st.pyplot(fig)
+    st.caption("Vinhos Tintos: um menor nível de dióxido de enxofre livre também pode estar associado a uma qualidade percebida como mais alta")
+    st.caption("Vinhos Brancos: um menor nível de dióxido de enxofre livre está associado a uma qualidade percebida como mais alta")
 
     # Gráfico de linhas -  Acidez fixa x Qualidade
     st.markdown("---")
@@ -149,24 +156,9 @@ def main():
     ax.set_title(' Media da Acidez fixa por Qualidade e Tipo de Vinho')
     ax.legend(title='Tipo de Vinho', labels=['Branco', 'Tinto'])
     st.pyplot(fig)
+    st.caption("Vinhos Tintos: O ponto ideal de acidez pode variar mas tende a quanto mais alto melhor a qualidade percebida")
+    st.caption("Vinhos Brancos: um menor nível de acidez fixa está associado a uma qualidade percebida como mais alta")
 
-    # Gráfico de linhas - Densidade x Qualidade
-    st.markdown("---")
-    st.subheader("Densidade x Qualidade")
-
-    # Agrupar e calcular a média
-    so2_df = df_selecionado.groupby(['Qualidade', 'tipo_vinho'])['Dióxido de enxofre livre'].mean().unstack()
-
-    # Criar o gráfico de linhas
-    fig, ax = plt.subplots(figsize=(10, 6))
-    so2_df.plot(kind='line', marker='o', color={'Branco': 'lightgray', 'Tinto': 'darkred'}, ax=ax)
-    ax.set_xlabel('Qualidade')
-    ax.set_ylabel('Densidade')
-    ax.set_title('Média da densidade por qualidade e Tipo de Vinho')
-    ax.legend(title='Tipo de Vinho', labels=['Branco', 'Tinto'])
-    st.pyplot(fig)
-
-
-
+    
 if __name__ == '__main__':
     main() 

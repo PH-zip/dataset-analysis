@@ -105,8 +105,8 @@ def main():
     ax.set_ylabel('Ácido cítrico')
     ax.legend(title='Tipo de Vinho', loc='upper right')
     st.pyplot(fig)
-
-    
+    st.caption("Vinhos Tintos: a acidez tende a aumentar confrome a qualidade percebida")
+    st.caption("Vinhos Brancos: a acidez tende a se manter estavel")
     
 
     # Gráfico de barras - Cloretos x Qualidade
@@ -124,17 +124,7 @@ def main():
     ax.set_title('Média dos Cloretos por Qualidade e Tipo de Vinho')
     ax.legend(title='Tipo de Vinho', labels=['Branco', 'Tinto'])
     st.pyplot(fig)
-
-
-
-    # Boxplot - Teor alcoólico por qualidade
-    st.markdown("---")
-    st.subheader("Boxplot do Teor Alcoólico por Qualidade")
-    fig, ax = plt.subplots(figsize=(10, 6))
-    sns.boxplot(data=df_selecionado, x='Qualidade', y='Álcool', palette='Set2', ax=ax)
-    ax.set_xlabel('Qualidade')
-    ax.set_ylabel('Teor Alcoólico')
-    st.pyplot(fig)
-
+    st.caption("Vinhos Tintos: a variacao do nivel de cloretos nao tende a afetar muito a qualidade final do vinho, porem, uma concentracao muito alta(0,12) eh percebida como uma qualidade inferior")
+    st.caption("Vinhos Brancos: a variacao dos cloretos tende a ser estavel, porem diminuindo um pouco conforme a qualidade aumenta")
 if __name__ == '__main__':
     main() 
