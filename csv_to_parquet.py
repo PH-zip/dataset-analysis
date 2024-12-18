@@ -1,5 +1,7 @@
 import pandas as pd
 import streamlit as st
+
+
 def conversor(csv_path,parquet_path):
     try:
         # Ler o arquivo CSV
