@@ -139,4 +139,8 @@ def main():
         st.pyplot(lmplot.fig)
 
 if __name__ == '__main__':
+<<<<<<< Updated upstream
         main() 
+=======
+        main() 
+>>>>>>> Stashed changes

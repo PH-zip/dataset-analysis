@@ -1,16 +1,16 @@
 import streamlit as st
+<<<<<<< Updated upstream
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from csv_to_parquet import conversor
+=======
+>>>>>>> Stashed changes
 
-def main():
-    # Configurações da aba
-    st.set_page_config(
-        page_title="Vinícola",  # Nome da aba
-        page_icon=":wine_glass:",  # Emoji de vinho para a aba
-    )
+st.set_page_config(page_title="Minha Aplicação Multipáginas", page_icon=":sparkles:")
+st.title("Bem-vindo à Minha Aplicação Multipáginas")
 
+<<<<<<< Updated upstream
     # Título e introdução
     st.title("Análise de Qualidade de Vinhos")
     st.markdown("---")  # Divisória
@@ -80,3 +80,6 @@ def main():
 
 if __name__ == '__main__':
     main()
+=======
+st.title("TESTE")
+>>>>>>> Stashed changes
