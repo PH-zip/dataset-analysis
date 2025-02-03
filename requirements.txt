@@ -5,3 +5,4 @@ scikit-learn==1.5.2
 plotly==5.3.1
 seaborn
 matplotlib  
+sklearn
