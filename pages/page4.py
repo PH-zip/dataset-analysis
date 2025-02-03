@@ -87,3 +87,6 @@ print('Acurácia combinado:', accuracy_score(y_wine_combined_teste, previsao_com
 print('Acurácia Branco:', accuracy_score(y_wine_white_teste, previsao_white))
 #precisão de 67.29% na primeira tentativa do combined
 
+plt.figure(figsize=(10, 6))
+plot_tree(random_forest_wine_red.estimators_[0], filled=True, rounded=True, class_names=['3', '4', '5', '6', '7', '8'])
+plt.show()
