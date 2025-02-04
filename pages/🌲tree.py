@@ -10,12 +10,13 @@ import matplotlib.pyplot as plt
 import pickle
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
+import streamlit as st
 
 
 # Base de dados de vinhos
-base_wine_red = pd.read_csv('dataset-analysis/Data/winequality-red.csv')
-base_combined_wine= pd.read_csv('dataset-analysis/Data/winequality-red.csv')
-base_wine_white = pd.read_csv('dataset-analysis/Data/df_white.csv')
+base_wine_red = pd.read_csv('Data/winequality-red.csv')
+base_combined_wine= pd.read_csv('Data/winequality-red.csv')
+base_wine_white = pd.read_csv('Data/df_white.csv')
 
 
 # Selecione todas as linhas e colunas, exceto a última coluna (que é a qualidade)
@@ -82,8 +83,13 @@ previsao_red= random_forest_wine_red.predict(x_wine_red_teste)
 previsao_combined= random_forest_wine_combined.predict(x_wine_combined_teste)
 previsao_white= random_forest_wine_white.predict(x_wine_white_teste)
 
-print('Acurácia Vermelho:', accuracy_score(y_wine_red_teste, previsao_red))
-print('Acurácia combinado:', accuracy_score(y_wine_combined_teste, previsao_combined))
-print('Acurácia Branco:', accuracy_score(y_wine_white_teste, previsao_white))
+acuracia_red =  accuracy_score(y_wine_red_teste, previsao_red)
+acuracia_combined = accuracy_score(y_wine_combined_teste, previsao_combined)
+acuracia_white = accuracy_score(y_wine_white_teste, previsao_white)
 #precisão de 67.29% na primeira tentativa do combined
 
+st.subheader("Resultados da Classificação")
+
+st.write(f"**Acurácia Vinho Tinto:** {acuracia_red:.2%}")
+st.write(f"**Acurácia Vinho Combinado:** {acuracia_combined:.2%}")
+st.write(f"**Acurácia Vinho Branco:** {acuracia_white:.2%}")
