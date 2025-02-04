@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-from csv_to_parquet import conversor
+from Projeto.csv_to_parquet import conversor
 
 def main():
         # Configurações da aba
@@ -15,11 +15,11 @@ def main():
         st.title("Análise da Qualidade de Vinhos: Explorando correlação entre variáveis")
 
         # Caminho para o seu arquivo CSV e parquet
-        red = conversor(R'D:\PH\GitHub\dataset-analysis\Data\winequality-red.csv' , R'D:\PH\GitHub\dataset-analysis\Data\red.parquet')  # Substitua pelo caminho do seu pc
-        white = conversor(R'D:\PH\GitHub\dataset-analysis\Data\winequality-white.csv', R'D:\PH\GitHub\dataset-analysis\Data\white.parquet')# Substitua pelo caminho do seu pc
+        red = conversor(R'Data\winequality-red.csv' , R'Data\red.parquet')  # Substitua pelo caminho do seu pc
+        white = conversor(R'Data\winequality-white.csv', R'Data\white.parquet')# Substitua pelo caminho do seu pc
 
         # Ler arquivos parquet
-        df_white = pd.read_csv(R'D:\PH\GitHub\dataset-analysis\Data\winequality-white.csv', sep=';')
+        df_white = pd.read_csv(R'Data\winequality-white.csv', sep=';')
         print(df_white.head())
 
         df_red = pd.read_parquet(red)
@@ -139,8 +139,4 @@ def main():
         st.pyplot(lmplot.fig)
 
 if __name__ == '__main__':
-<<<<<<< Updated upstream
         main() 
-=======
-        main() 
->>>>>>> Stashed changes
