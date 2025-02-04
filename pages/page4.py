@@ -7,6 +7,7 @@ from sklearn import tree
 import seaborn as sns
 from sklearn.tree import plot_tree  # Importação correta da função
 import matplotlib.pyplot as plt
+<<<<<<< Updated upstream
 import pickle
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
@@ -16,6 +17,19 @@ from sklearn.model_selection import train_test_split
 base_wine_red = pd.read_csv('dataset-analysis/Data/winequality-red.csv')
 base_combined_wine= pd.read_csv('dataset-analysis/Data/winequality-red.csv')
 base_wine_white = pd.read_csv('dataset-analysis/Data/df_white.csv')
+=======
+from sklearn.tree import plot_tree
+import pickle
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+import matplotlib.cm as cm
+
+
+# Base de dados de vinhos
+base_wine_red = pd.read_csv('Data/winequality-red.csv')
+base_combined_wine= pd.read_csv('Data/winequality-red.csv')
+base_wine_white = pd.read_csv('Data/df_white.csv')
+>>>>>>> Stashed changes
 
 
 # Selecione todas as linhas e colunas, exceto a última coluna (que é a qualidade)
@@ -68,7 +82,11 @@ with open('wine_white.pkl', mode='wb') as f:
 # Criação do modelo
 
 random_forest_wine_red = RandomForestClassifier(n_estimators=100, random_state=0, criterion='entropy')
+<<<<<<< Updated upstream
 random_forest_wine_combined = RandomForestClassifier(n_estimators=100, random_state=0, criterion='entropy')
+=======
+random_forest_wine_combined = RandomForestClassifier(n_estimators=1000, max_depth=5, random_state=0, criterion='entropy')
+>>>>>>> Stashed changes
 random_forest_wine_white = RandomForestClassifier(n_estimators=100, random_state=0, criterion='entropy')
 
 
@@ -87,6 +105,32 @@ print('Acurácia combinado:', accuracy_score(y_wine_combined_teste, previsao_com
 print('Acurácia Branco:', accuracy_score(y_wine_white_teste, previsao_white))
 #precisão de 67.29% na primeira tentativa do combined
 
+<<<<<<< Updated upstream
 plt.figure(figsize=(10, 6))
 plot_tree(random_forest_wine_red.estimators_[0], filled=True, rounded=True, class_names=['3', '4', '5', '6', '7', '8'])
 plt.show()
+=======
+#grafico da arvore de decisão
+plt.figure(figsize=(20, 10))
+plot_tree(random_forest_wine_combined.estimators_[0], 
+        feature_names=['Acidez Fixa', 'Acidez Volátil', 'Ácido Cítrico', 'Açúcar', 'Clorides', 'Enxofre Livre', 'Enxofre Total', 'Densidade', 'pH', 'Sulfatos', 'Álcool'],
+        filled=True, 
+        fontsize=6, 
+        rounded=True,
+        class_names=[str(i) for i in range(3, 10)])
+
+
+
+# Personalize o texto das caixas
+for texto in plt.gca().texts:
+    linhas = texto.get_text().split('\n')
+    nova_linha = [linha for linha in linhas if not linha.startswith('value')]
+    texto.set_text('\n'.join(nova_linha))
+
+
+
+plt.title('Árvore de Decisão para o Modelo de Random Forest Combinado - Qualidade de Vinho', fontsize=18)
+plt.tight_layout()  # Ajuste a layout para evitar que os rótulos sejam cortados
+plt.savefig('arvore_combinada', dpi=300, bbox_inches='tight')  # Salva a imagem como 'arvore_decisao.png'
+plt.show()
+>>>>>>> Stashed changes
