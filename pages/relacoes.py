@@ -14,9 +14,10 @@ def main():
         # Título e introdução
         st.title("Relacoes")
 
-        # Caminho para o seu arquivo CSV e parquet
-        red = conversor(R'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\winequality-red.csv', R'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\red.parquet')
-        white = conversor(R'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\df_white.csv', R'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\white.parquet')
+            # Caminho para o seu arquivo CSV e parquet
+        red = conversor(R'Data\winequality-red.csv', R'Data\red.parquet')
+        white = conversor(R'Data\df_white.csv', R'Data\white.parquet')
+
         # Ler arquivos parquet
         
         df_white = pd.read_parquet(white)
@@ -137,9 +138,9 @@ def main():
                         height=6, aspect=1.5)
 
         # Título e rótulos
-        lmplot.fig.suptitle('Qualidade X Densidade - Vinhos Brancos e Tintos', fontsize=18)
+        lmplot.figure.suptitle('Qualidade X Densidade - Vinhos Brancos e Tintos', fontsize=18)
         lmplot.set_axis_labels('Qualidade', 'Densidade')
-        st.pyplot(lmplot.fig)
+        st.pyplot(lmplot.figure)
         st.caption( st.caption("Vinhos de alta qualidade geralmente apresentam uma densidade mais baixa, devido ao teor alcoólico mais elevado e à menor quantidade de açúcar residual"))
 
 if __name__ == '__main__':
