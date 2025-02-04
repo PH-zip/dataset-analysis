@@ -10,13 +10,12 @@ def main():
         page_title="Vinícola",  # Nome da aba
         page_icon=":wine_glass:",  # Emoji de vinho para a aba
     )
-
-    # Título e introdução
-    st.title("Análise da Qualidade de Vinhos: Explorando correlação entre variáveis")
+    st.title("Graficos de barras")
 
     # Caminho para o seu arquivo CSV e parquet
-    red = conversor(R'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\winequality-red.csv', R'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\red.parquet')
-    white = conversor(R'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\df_white.csv', R'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\white.parquet')
+    red = conversor(R'Data\winequality-red.csv', R'Data\red.parquet')
+    white = conversor(R'Data\df_white.csv', R'Data\white.parquet')
+
 
     # Ler arquivos parquet
     df_white = pd.read_parquet(white)
@@ -90,38 +89,43 @@ def main():
         df_selecionado = df_selecionado[df_selecionado['tipo_vinho'] == 'Tinto']
     elif somente_vinhos_brancos:
         df_selecionado = df_selecionado[df_selecionado['tipo_vinho'] == 'Branco']
-    # Exibir dados do dataset
-    st.write(f"### Dados do Dataset ({len(df_selecionado)} linhas)")
-    st.dataframe(df_selecionado)
 
-    # Gráfico de barras - Distribuição da qualidade
+
+    # Gráfico de barras agrupado: Ácido cítrico x Qualidade
     st.markdown("---")
-    st.subheader("Distribuição com base na Qualidade dos Vinhos")
-    qualidade_counts = df_selecionado['Qualidade'].value_counts().sort_index()
-    fig, ax = plt.subplots()
-    qualidade_counts.plot(kind='bar', color='darkred', ax=ax)
+    st.subheader("Comparação do Ácido cítrico por Qualidade entre Vinhos Tintos e Brancos")
+    fig, ax = plt.subplots(figsize=(10, 6))
+    sns.barplot(
+    data=df_selecionado, 
+    x='Qualidade', 
+    y='Ácido cítrico', 
+    hue='tipo_vinho', 
+    palette={"Branco": "lightgray", "Tinto": "darkred"}
+)
     ax.set_xlabel('Qualidade')
-    ax.set_ylabel('Quantidade') 
-    # Rotacionar os ticks no eixo X (usando ax.tick_params)
-    ax.tick_params(axis='x', rotation=0)
+    ax.set_ylabel('Ácido cítrico')
+    ax.legend(title='Tipo de Vinho', loc='upper right')
     st.pyplot(fig)
+    st.caption("Vinhos Tintos: a acidez tende a aumentar confrome a qualidade percebida")
+    st.caption("Vinhos Brancos: a acidez tende a se manter estavel")
+    
 
-    # Estatísticas descritivas
+    # Gráfico de barras - Cloretos x Qualidade
     st.markdown("---")
-    st.subheader("Estatísticas Descritivas")
-    st.write(df_selecionado.describe())
+    st.subheader("Cloretos x Qualidade")
 
-    # Distribuição de variáveis
-    st.markdown("---")
-    st.subheader("Distribuição de Variáveis")
-    coluna = st.selectbox("Selecione a coluna para análise", options=combined_df.columns)
+    # Agrupar e calcular a média dos cloretos
+    cloretos_df = df_selecionado.groupby(['Qualidade', 'tipo_vinho'])['Cloretos'].mean().unstack()
 
-    # Calcular a contagem
-    contagem = df_selecionado[coluna].value_counts().reset_index()
-    contagem.columns = [coluna, 'count']  # Renomeia as colunas
-
-    # Exibir o gráfico
-    st.bar_chart(contagem.set_index(coluna)['count'])
-
+    # Criar o gráfico de barras
+    fig, ax = plt.subplots(figsize=(10, 6))
+    cloretos_df.plot(kind='bar', color={'Branco': 'lightgray', 'Tinto': 'darkred'}, ax=ax)
+    ax.set_xlabel('Qualidade')
+    ax.set_ylabel('Cloretos')
+    ax.set_title('Média dos Cloretos por Qualidade e Tipo de Vinho')
+    ax.legend(title='Tipo de Vinho', labels=['Branco', 'Tinto'])
+    st.pyplot(fig)
+    st.caption("Vinhos Tintos: a variacao do nivel de cloretos nao tende a afetar muito a qualidade final do vinho, porem, uma concentracao muito alta(0,12) eh percebida como uma qualidade inferior")
+    st.caption("Vinhos Brancos: a variacao dos cloretos tende a ser estavel, porem diminuindo um pouco conforme a qualidade aumenta")
 if __name__ == '__main__':
     main() 

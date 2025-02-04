@@ -15,8 +15,8 @@ def main():
     st.title("Análise da Qualidade de Vinhos: Explorando correlação entre variáveis")
 
     # Caminho para o seu arquivo CSV e parquet
-    red = conversor(R'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\winequality-red.csv', R'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\red.parquet')
-    white = conversor(R'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\df_white.csv', R'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\white.parquet')
+    red = conversor(R'Data\winequality-red.csv', R'Data\red.parquet')
+    white = conversor(R'Data\df_white.csv', R'Data\white.parquet')
 
     # Ler arquivos parquet
     df_white = pd.read_parquet(white)
