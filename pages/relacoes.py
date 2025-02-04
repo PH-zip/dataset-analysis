@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-from csv_to_parquet import conversor
+from Projeto.csv_to_parquet import conversor
 
 def main():
         # Configurações da aba
@@ -12,16 +12,14 @@ def main():
         )
 
         # Título e introdução
-        st.title("Análise da Qualidade de Vinhos: Explorando correlação entre variáveis")
+        st.title("Relacoes")
 
         # Caminho para o seu arquivo CSV e parquet
-        red = conversor(R'D:\PH\GitHub\dataset-analysis\Data\winequality-red.csv' , R'D:\PH\GitHub\dataset-analysis\Data\red.parquet')  # Substitua pelo caminho do seu pc
-        white = conversor(R'D:\PH\GitHub\dataset-analysis\Data\winequality-white.csv', R'D:\PH\GitHub\dataset-analysis\Data\white.parquet')# Substitua pelo caminho do seu pc
-
+        red = conversor(R'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\winequality-red.csv', R'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\red.parquet')
+        white = conversor(R'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\df_white.csv', R'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\white.parquet')
         # Ler arquivos parquet
-        df_white = pd.read_csv(R'D:\PH\GitHub\dataset-analysis\Data\winequality-white.csv', sep=';')
-        print(df_white.head())
-
+        
+        df_white = pd.read_parquet(white)
         df_red = pd.read_parquet(red)
 
         # Adicionar a coluna 'wine_type'
@@ -92,6 +90,7 @@ def main():
                 df_selecionado = df_selecionado[df_selecionado['tipo_vinho'] == 'Tinto']
         elif somente_vinhos_brancos:
                 df_selecionado = df_selecionado[df_selecionado['tipo_vinho'] == 'Branco']
+        st.markdown("---")
 
         # Criar uma tabela de contingência para ambos os tipos de vinho
         heatmap_data = combined_df.pivot_table(values='Acidez volátil', 
@@ -106,9 +105,10 @@ def main():
         plt.xlabel('Acidez Volátil', fontsize=14)
         plt.ylabel('Qualidade', fontsize=14)
         st.pyplot(plt)  # Use st.pyplot para exibir o gráfico no Streamlit
+        st.caption("Vinhos de qualidade inferior geralmente apresentam níveis mais elevados de acidez volátil.")
         
         
-        
+        st.markdown("---")
         # Criar o gráfico de linha
         
         plt.figure(figsize=(10, 6), facecolor='lightgray')  # Cor de fundo da figura
@@ -121,7 +121,10 @@ def main():
         plt.xticks(range(3, 9))  # Ajustar os ticks do eixo x para as qualidades esperadas
         plt.xlim(3, 8)  # Limitar o eixo x para que vá de 3 a 8
         plt.grid(True)
-        st.pyplot(plt)  # Exibir o gráfico no Streamlit
+        st.pyplot(plt)
+        st.caption("Vinhos com maior teor alcoólico geralmente são associados a sabores mais intensos e equilibrados.")
+          # Exibir o gráfico no Streamlit
+        st.markdown("---")
 
         # Lmplot para Vinhos Brancos
         # Combinar os DataFrames de vinhos brancos e tintos
@@ -137,6 +140,7 @@ def main():
         lmplot.fig.suptitle('Qualidade X Densidade - Vinhos Brancos e Tintos', fontsize=18)
         lmplot.set_axis_labels('Qualidade', 'Densidade')
         st.pyplot(lmplot.fig)
+        st.caption( st.caption("Vinhos de alta qualidade geralmente apresentam uma densidade mais baixa, devido ao teor alcoólico mais elevado e à menor quantidade de açúcar residual"))
 
 if __name__ == '__main__':
         main() 

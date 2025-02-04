@@ -10,7 +10,9 @@ def main():
         page_title="Vinícola",  # Nome da aba
         page_icon=":wine_glass:",  # Emoji de vinho para a aba
     )
-    st.title("Graficos de linhas")
+
+    # Título e introdução
+    st.title("Análise da Qualidade de Vinhos: Explorando correlação entre variáveis")
 
     # Caminho para o seu arquivo CSV e parquet
     red = conversor(R'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\winequality-red.csv', R'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\red.parquet')
@@ -88,77 +90,38 @@ def main():
         df_selecionado = df_selecionado[df_selecionado['tipo_vinho'] == 'Tinto']
     elif somente_vinhos_brancos:
         df_selecionado = df_selecionado[df_selecionado['tipo_vinho'] == 'Branco']
+    # Exibir dados do dataset
+    st.write(f"### Dados do Dataset ({len(df_selecionado)} linhas)")
+    st.dataframe(df_selecionado)
 
-    # Gráfico de linha - pH vs Qualidade por Tipo de Vinho
+    # Gráfico de barras - Distribuição da qualidade
     st.markdown("---")
-    st.subheader("Gráfico de Linha: pH vs Qualidade por Tipo de Vinho")
-
-    # Criar um DataFrame para o gráfico de linha
-    line_chart_data = df_selecionado.groupby(['Qualidade', 'tipo_vinho'])['pH'].mean().unstack().reset_index()
-
+    st.subheader("Distribuição com base na Qualidade dos Vinhos")
+    qualidade_counts = df_selecionado['Qualidade'].value_counts().sort_index()
     fig, ax = plt.subplots()
-    line_chart_data.set_index('Qualidade').plot(ax=ax, color={'Branco': 'lightgray', 'Tinto': 'darkred'})
-    ax.set_title("Média do pH por Qualidade dos Vinhos")
-    ax.set_xlabel("Qualidade")
-    ax.set_ylabel("pH")
-    st.pyplot(fig)
-    st.caption("Vinhos Tintos: um pH mais baixo está associado a uma qualidade percebida como mais alta")
-    st.caption("Vinhos Brancos: um pH mais alto pode estar relacionado a uma qualidade percebida como mais alta")
-
-    # Gráfico de linha - Açúcar Residual vs Qualidade
-    st.markdown("---")
-    st.subheader("Gráfico de Linha: Açúcar Residual vs Qualidade por Tipo de Vinho")
-
-    # Criar um DataFrame para o gráfico de linha
-    line_chart_data = df_selecionado.groupby(['Qualidade', 'tipo_vinho'])['Açúcar residual'].mean().unstack().reset_index()
-
-    # Exibir o gráfico de linha com cores específicas
-    fig, ax = plt.subplots()
-    line_chart_data.set_index('Qualidade').plot(ax=ax, color={'Branco': 'lightgray', 'Tinto': 'darkred'})
-    ax.set_title("Média do Açúcar Residual por Qualidade dos Vinhos")
-    ax.set_xlabel("Qualidade")
-    ax.set_ylabel("Açúcar Residual")
-    st.pyplot(fig)  
-    st.caption("Vinhos Tintos: o acucar residual tende a se manter estavel nao afetando muito na percepção de qualidade")
-    st.caption("Vinhos Brancos: a percepção de qualidade pode estar relacionada a niveis moderados de acucar , porem tentendo a diminuir conforme a qualidade aumenta ")
-    
-
-    # Gráfico de linhas - Dióxido de Enxofre Livre x Qualidade
-    st.markdown("---")
-    st.subheader("Dióxido de Enxofre Livre x Qualidade")
-
-    # Agrupar e calcular a média
-    so2_df = df_selecionado.groupby(['Qualidade', 'tipo_vinho'])['Dióxido de enxofre livre'].mean().unstack()
-
-    # Criar o gráfico de linhas
-    fig, ax = plt.subplots(figsize=(10, 6))
-    so2_df.plot(kind='line', marker='o', color={'Branco': 'lightgray', 'Tinto': 'darkred'}, ax=ax)
+    qualidade_counts.plot(kind='bar', color='darkred', ax=ax)
     ax.set_xlabel('Qualidade')
-    ax.set_ylabel('Dióxido de Enxofre Livre')
-    ax.set_title('Média do Dióxido de Enxofre Livre por Qualidade e Tipo de Vinho')
-    ax.legend(title='Tipo de Vinho', labels=['Branco', 'Tinto'])
+    ax.set_ylabel('Quantidade') 
+    # Rotacionar os ticks no eixo X (usando ax.tick_params)
+    ax.tick_params(axis='x', rotation=0)
     st.pyplot(fig)
-    st.caption("Vinhos Tintos: um menor nível de dióxido de enxofre livre também pode estar associado a uma qualidade percebida como mais alta")
-    st.caption("Vinhos Brancos: um menor nível de dióxido de enxofre livre está associado a uma qualidade percebida como mais alta")
 
-    # Gráfico de linhas -  Acidez fixa x Qualidade
+    # Estatísticas descritivas
     st.markdown("---")
-    st.subheader("Acidez fixa x Qualidade")
+    st.subheader("Estatísticas Descritivas")
+    st.write(df_selecionado.describe())
 
-    # Agrupar e calcular a média
-    so2_df = df_selecionado.groupby(['Qualidade', 'tipo_vinho'])['Acidez fixa'].mean().unstack()
+    # Distribuição de variáveis
+    st.markdown("---")
+    st.subheader("Distribuição de Variáveis")
+    coluna = st.selectbox("Selecione a coluna para análise", options=combined_df.columns)
 
-    # Criar o gráfico de linhas
-    fig, ax = plt.subplots(figsize=(10, 6))
-    so2_df.plot(kind='line', marker='o', color={'Branco': 'lightgray', 'Tinto': 'darkred'}, ax=ax)
-    ax.set_xlabel('Qualidade')
-    ax.set_ylabel('Acidez fixa')
-    ax.set_title(' Media da Acidez fixa por Qualidade e Tipo de Vinho')
-    ax.legend(title='Tipo de Vinho', labels=['Branco', 'Tinto'])
-    st.pyplot(fig)
-    st.caption("Vinhos Tintos: O ponto ideal de acidez pode variar mas tende a quanto mais alto melhor a qualidade percebida")
-    st.caption("Vinhos Brancos: um menor nível de acidez fixa está associado a uma qualidade percebida como mais alta")
+    # Calcular a contagem
+    contagem = df_selecionado[coluna].value_counts().reset_index()
+    contagem.columns = [coluna, 'count']  # Renomeia as colunas
 
-    
+    # Exibir o gráfico
+    st.bar_chart(contagem.set_index(coluna)['count'])
+
 if __name__ == '__main__':
     main() 
