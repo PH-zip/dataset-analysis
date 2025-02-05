@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Configuração inicial do Streamlit
-st.set_page_config(page_title="Análise de Cluster de Vinhos", layout="wide")
+st.set_page_config(page_title="Análise de Cluster de Vinhos")
 st.title("Análise de Cluster de Vinhos 🍷")
 
 # Carregar dados
@@ -50,8 +50,9 @@ with col2:
 kmeans = KMeans(n_clusters=n_clusters, random_state=42)
 df_combined['Cluster'] = kmeans.fit_predict(features_scaled)
 
-# Criar visualização
-fig, ax = plt.subplots(figsize=(10, 6))
+# --- Scatter Plot ---
+fig, ax = plt.subplots(figsize=(10, 6))  # Reduzindo ainda mais o tamanho
+
 sns.scatterplot(
     x=df_combined[x_axis],
     y=df_combined[y_axis],
@@ -59,12 +60,37 @@ sns.scatterplot(
     palette="deep",
     ax=ax
 )
-ax.set_title(f"Clusters Baseados em {x_axis} e {y_axis}")
-ax.set_xlabel(x_axis)
-ax.set_ylabel(y_axis)
 
-# Exibir gráfico no Streamlit
-st.pyplot(fig)
+ax.set_title(f"Clusters Baseados em {x_axis} e {y_axis}", fontsize=10)
+ax.set_xlabel(x_axis, fontsize=12)
+ax.set_ylabel(y_axis, fontsize=12)
+
+fig.tight_layout()  # Ajusta os espaçamentos
+st.pyplot(fig)  # Exibe no Streamlit sem esticar
+
+# --- Heatmap ---
+st.subheader("Qualidade Média por Cluster")
+
+fig, ax = plt.subplots(figsize=(10, 6))  # Bem menor
+
+heatmap_data = df_combined.groupby('Cluster')['quality'].mean().to_frame()
+
+sns.heatmap(
+    heatmap_data,
+    annot=True,
+    fmt=".2f",
+    cmap="coolwarm",
+    linewidths=.5,
+    ax=ax
+)
+
+ax.set_title('Média de Qualidade por Cluster', fontsize=10, pad=5)
+ax.set_xlabel('Qualidade Média', fontsize=12)
+ax.set_ylabel('Cluster', fontsize=12)
+
+fig.tight_layout()  # Ajusta espaçamentos para evitar excesso de espaço
+st.pyplot(fig)  # Sem "use_container_width"
+
 
 # Mostrar dados estatísticos
 st.subheader("Estatísticas por Cluster")
@@ -85,3 +111,5 @@ st.dataframe(
     .background_gradient(cmap='Blues', axis=0)
     .set_properties(**{'text-align': 'center'})
 )
+
+
