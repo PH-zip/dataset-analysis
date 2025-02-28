@@ -12,7 +12,7 @@ st.title("Análise de Cluster de Vinhos 🍷")
 # Carregar dados
 @st.cache_data
 def load_data():
-    df = pd.read_csv(r'C:\Users\ianli\OneDrive\Área de Trabalho\projeto 3\dataset-analysis\Data\winequality_combined.csv')
+    df = pd.read_csv(r'Data\winequality_combined.csv')
     if 'Unnamed: 0' in df.columns:
         df = df.drop(columns=['Unnamed: 0'])
     return df

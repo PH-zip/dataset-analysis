@@ -139,7 +139,7 @@ def main():
     ax.legend(title='Tipo de Vinho', labels=['Branco', 'Tinto'])
     st.pyplot(fig)
     st.caption("Vinhos Tintos: um menor nível de dióxido de enxofre livre também pode estar associado a uma qualidade percebida como mais alta")
-    st.caption("Vinhos Brancos: um menor nível de dióxido de enxofre livre está associado a uma qualidade percebida como mais alta")
+    st.caption("Vinhos Brancos: o nivel de dioxido de enxofre tende a ser estavel, porem niveis muito altos so mostram associados a uma qualidade percebida menor")
 
     # Gráfico de linhas -  Acidez fixa x Qualidade
     st.markdown("---")
