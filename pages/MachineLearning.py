@@ -12,6 +12,7 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, classification_report, confusion_matrix
 from sklearn.tree import plot_tree
+import joblib
 
 def main():
     # Configurações da aba
@@ -62,6 +63,11 @@ def main():
 
     print(classification_report(y_teste, X_previsao_RF))  # 84% de precisão
 
+    joblib.dump(RF, 'random_forest_model.pkl')  # Salva o modelo treinado
+    joblib.dump(scaler, 'scaler.pkl')  # Salva o scaler
+    joblib.dump(label_quality, 'label_encoder.pkl') 
+
+
     # Escolhendo a árvore
     estimator = RF.estimators_[0]
 
@@ -85,7 +91,7 @@ def main():
 
 
 
-    
+    #----------------------------------------------------------------------------------------
     st.markdown("---")
 
     st.subheader("KNN")
@@ -118,6 +124,9 @@ def main():
     print(accuracy_score(y_teste, pred_final))
 
     print(classification_report(y_teste, pred_final))
+    
+    with open('modelo_KNN.pkl', 'wb') as arquivo:
+        pickle.dump(RF, arquivo)
 
 if __name__ == '__main__':
     main()
