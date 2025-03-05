@@ -2,9 +2,13 @@ import streamlit as st
 import pandas as pd
 import joblib
 from sklearn.preprocessing import StandardScaler
+from imblearn.over_sampling import SMOTE
 
 # Título do aplicativo
 st.title("Previsão da Qualidade do Vinho")
+
+# Opção para escolher o modelo
+modelo_escolhido = st.selectbox("Escolha o modelo para previsão:", ["Random Forest", "KNN", "XGBoost"])
 
 # Formulário para entrada das variáveis
 st.header("Insira os Valores das Variáveis")
@@ -37,23 +41,31 @@ if st.button("Prever Qualidade do Vinho"):
         "alcohol": [alcohol]
     })
 
-    # Carregando o modelo, o scaler e o LabelEncoder salvos
     try:
-        RF = joblib.load('random_forest_model.pkl')  # Carrega o modelo treinado
-        scaler = joblib.load('scaler.pkl')  # Carrega o scaler
-        label_quality = joblib.load('label_encoder.pkl')  # Carrega o LabelEncoder
+        # Carregando o scaler e o LabelEncoder
+        scaler = joblib.load('scaler.pkl')
+        label_quality = joblib.load('label_encoder.pkl')
+        
+        # Escalonando as entradas do usuário
+        dados_usuario_scaled = scaler.transform(dados_usuario)
+        
+        # Escolhendo o modelo correspondente
+        if modelo_escolhido == "Random Forest":
+            modelo = joblib.load('modelo_RF.pkl')
+        elif modelo_escolhido == "KNN":
+            modelo = joblib.load('modelo_knn.pkl')
+        elif modelo_escolhido == "XGBoost":
+            modelo = joblib.load('xgboost_model.pkl')
+        
+        # Fazendo a previsão
+        previsao = modelo.predict(dados_usuario_scaled)
+        
+        # Decodificando a previsão usando o LabelEncoder
+        qualidade = label_quality.inverse_transform(previsao)
+        
+        # Exibindo o resultado
+        st.success(f"A qualidade do vinho é: **{qualidade[0]}**")
     except FileNotFoundError:
-        st.error("Arquivos do modelo não encontrados. Certifique-se de que 'random_forest_model.pkl', 'scaler.pkl' e 'label_encoder.pkl' estão no diretório correto.")
-        st.stop()
-
-    # Escalonando as entradas do usuário
-    dados_usuario_scaled = scaler.transform(dados_usuario)
-
-    # Fazendo a previsão
-    previsao = RF.predict(dados_usuario_scaled)
-
-    # Decodificando a previsão usando o LabelEncoder
-    qualidade = label_quality.inverse_transform(previsao)
-
-    # Exibindo o resultado
-    st.success(f"A qualidade do vinho é: **{qualidade[0]}**")
+        st.error("Arquivos do modelo não encontrados. Certifique-se de que os arquivos de modelo, scaler e label encoder estão no diretório correto.")
+        
+    #0=alto, 1=baixo, 2=médio
