@@ -34,10 +34,26 @@ df_combined['wine_type'] = df_combined['wine_type'].replace({
 })
 
 features_scaled, features = preprocess_data(df_combined)
+# --- Método do Cotovelo ---
+st.subheader("Método do Cotovelo para Determinar o Melhor Número de Clusters")
+
+sse = []
+k_range = range(1, 11)  # Testa valores de k de 1 a 10
+for k in k_range:
+    kmeans = KMeans(n_clusters=k, random_state=42)
+    kmeans.fit(features_scaled)
+    sse.append(kmeans.inertia_)  # inertia_ retorna o SSE
+
+fig, ax = plt.subplots(figsize=(10, 6))
+ax.plot(k_range, sse, marker='o')
+ax.set_xlabel('Número de Clusters (k)')
+ax.set_ylabel('Soma dos Erros Quadráticos (SSE)')
+ax.set_title('Método do Cotovelo')
+st.pyplot(fig)
 
 # Sidebar para controles interativos
 st.sidebar.header("Configurações dos Clusters")
-n_clusters = st.sidebar.slider("Número de Clusters", 2, 5, 3)
+n_clusters = st.sidebar.slider("Número de Clusters", 3, 4, 5,)
 
 # Seleção de variáveis para visualização
 col1, col2 = st.columns(2)

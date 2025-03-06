@@ -14,7 +14,7 @@ def main():
         # Título e introdução
         st.title("Relacoes")
 
-            # Caminho para o seu arquivo CSV e parquet
+        # Caminho para o seu arquivo CSV e parquet
         red = conversor(R'Data\winequality-red.csv', R'Data\red.parquet')
         white = conversor(R'Data\df_white.csv', R'Data\white.parquet')
 

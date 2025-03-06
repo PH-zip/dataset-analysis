@@ -16,7 +16,6 @@ def main():
     red = conversor(R'Data\winequality-red.csv', R'Data\red.parquet')
     white = conversor(R'Data\df_white.csv', R'Data\white.parquet')
 
-
     # Ler arquivos parquet
     df_white = pd.read_parquet(white)
     df_red = pd.read_parquet(red)
