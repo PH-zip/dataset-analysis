@@ -60,9 +60,6 @@ def main():
         page_icon=":wine_glass:",  # Emoji de vinho para a aba
     )
 
-    # Título e introdução
-    st.title("Análise da Qualidade de Vinhos: Explorando correlação entre variáveis")
-
     # Caminho para o seu arquivo CSV e parquet
     red = conversor(R'Data\winequality-red.csv', R'Data\red.parquet')
     white = conversor(R'Data\df_white.csv', R'Data\white.parquet')
@@ -137,56 +134,27 @@ def main():
         df_selecionado = df_selecionado[df_selecionado['tipo_vinho'] == 'Tinto']
     elif somente_vinhos_brancos:
         df_selecionado = df_selecionado[df_selecionado['tipo_vinho'] == 'Branco']
-
-    # Exibir dados do dataset
-    st.write(f"### Dados do Dataset ({len(df_selecionado)} linhas)")
-    st.dataframe(df_selecionado)
-
-    # Gráfico de barras - Distribuição da qualidade
-    st.markdown("---")
-    st.subheader("Distribuição com base na Qualidade dos Vinhos")
-    qualidade_counts = df_selecionado['Qualidade'].value_counts().sort_index()
-    fig, ax = plt.subplots()
-    qualidade_counts.plot(kind='bar', color='darkred', ax=ax)
-    ax.set_xlabel('Qualidade')
-    ax.set_ylabel('Quantidade') 
-    ax.tick_params(axis='x', rotation=0)
-    st.pyplot(fig)
-
-    # Estatísticas descritivas
-    st.markdown("---")
-    st.subheader("Estatísticas Descritivas")
-    st.write(df_selecionado.describe())
-
-    # Distribuição de variáveis
-    st.markdown("---")
-    st.subheader("Distribuição de Variáveis")
-    coluna = st.selectbox("Selecione a coluna para análise", options=combined_df.columns)
-
-    # Calcular a contagem
-    contagem = df_selecionado[coluna].value_counts().reset_index()
-    contagem.columns = [coluna, 'count']  # Renomeia as colunas
-
-    # Exibir o gráfico
-    st.bar_chart(contagem.set_index(coluna)['count'])
+   
 
     # Treinamento do modelo
-    if st.button("Treinar Modelo"):
-        df_model = load_and_preprocess_data(df_selecionado)[0]
-        accuracy, y_teste, y_pred = train_and_evaluate_model(df_model)
+    df_model = load_and_preprocess_data(df_selecionado)[0]
+    accuracy, y_teste, y_pred = train_and_evaluate_model(df_model)
         
-        st.markdown("---")
-        st.subheader("Resultados do Modelo")
-        st.write(f"Acurácia do modelo: {accuracy:.2f}")
+    st.header("Resultados do Modelo")
+    st.markdown("---")
 
         # Matriz de confusão
-        cm = confusion_matrix(y_teste, y_pred)
-        plt.figure(figsize=(8, 6))
-        sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=['baixa', 'média', 'alta'], yticklabels=['baixa', 'média', 'alta'])
-        plt.ylabel('Classe verdadeira')
-        plt.xlabel('Classe prevista')
-        plt.title('Matriz de Confusão')
-        st.pyplot(plt)
+    cm = confusion_matrix(y_teste, y_pred)
+    plt.figure(figsize=(8, 6))
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=['baixa', 'média', 'alta'], yticklabels=['baixa', 'média', 'alta'])
+    plt.ylabel('Classe verdadeira')
+    plt.xlabel('Classe prevista')
+    plt.title('Matriz de Confusão')
+    st.pyplot(plt)
+
+    report = classification_report(y_teste, y_pred,  output_dict=True)
+    df_report = pd.DataFrame(report).T
+    st.write(df_report)
 
 if __name__ == '__main__':
     main()

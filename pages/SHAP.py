@@ -11,9 +11,8 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.ensemble import RandomForestClassifier
 import joblib
 import shap
+import streamlit as st
 
-# Configuração para exibir gráficos no notebook
-%matplotlib inline
 
 # Função principal
 def main():
@@ -49,8 +48,7 @@ def main():
     joblib.dump(scaler, 'scaler.pkl')
     joblib.dump(label_quality, 'label_encoder.pkl')
 
-    # Visualização da árvore
-    print("\nVisualização da Árvore de Decisão:")
+    # Visualização da árvore de decisão
     estimator = RF.estimators_[0]
     plt.figure(figsize=(50, 30), dpi=100)
     plot_tree(estimator,
@@ -60,14 +58,13 @@ def main():
               rounded=True,
               proportion=True,
               max_depth=2)
-    plt.show()
+    st.pyplot(plt)
 
     # Métricas de avaliação
-    print("\nRelatório de Classificação:")
-    print(classification_report(y_teste, X_previsao_RF))
+    st.write("\nRelatório de Classificação:")
+    st.write(classification_report(y_teste, X_previsao_RF))
 
     # Modelo KNN
-    print("\nTreinando Modelo KNN:")
     X_treino_knn = scaler.fit_transform(X_treino)
     X_teste_knn = scaler.transform(X_teste)
 
@@ -83,28 +80,25 @@ def main():
     plt.title('Taxa de Erro por Geração')
     plt.xlabel('Geração')
     plt.ylabel('Taxa de Erro')
-    plt.show()
+    st.pyplot(plt)
 
     knn_final = KNeighborsClassifier(n_neighbors=18)
     knn_final.fit(X_treino_knn, y_treino)
     joblib.dump(knn_final, 'modelo_KNN.pkl')
 
     # Análise SHAP
-    print("\nAnalisando SHAP Values:")
     try:
         explainer = shap.TreeExplainer(RF)
         X_teste_df = pd.DataFrame(X_teste_RF, columns=X.columns)
         shap_values = explainer.shap_values(X_teste_df)
 
         # Summary plot
-        print("\nSHAP Summary Plot:")
-        shap.summary_plot(shap_values, X_teste_df)
-        plt.show()
+        shap.summary_plot(shap_values, X_teste_df,  max_display=X_teste_df.shape[1])
+        st.pyplot(plt)
 
         # Dependence plots por classe
-        print("\nSHAP Dependence Plots:")
         for i, classe in enumerate(labels):
-            print(f"\nClasse: {classe}")
+            st.write(f"\nClasse: {classe}")
             if 'alcohol' in X.columns:
                 shap.dependence_plot(
                     "alcohol",
@@ -113,23 +107,23 @@ def main():
                     show=False
                 )
                 plt.tight_layout()
-                plt.show()
+                st.pyplot(plt)
                 
     except Exception as e:
         print(f"Erro na geração dos gráficos SHAP: {str(e)}")
 
     # Importância das features
-    print("\nImportância das Variáveis:")
     importances = RF.feature_importances_
     indices = np.argsort(importances)[::-1]
 
     plt.figure(figsize=(10, 6))
     plt.title("Importância das Variáveis")
     plt.bar(range(X.shape[1]), importances[indices], align="center")
-    plt.xticks(range(X.shape[1]), X.columns[indices], rotation=90)
+    plt.xticks(range(X.shape[1]), X.columns[indices], rotation=0)
     plt.xlim([-1, X.shape[1]])
     plt.tight_layout()
-    plt.show()
-
+    st.pyplot(plt)
+    st.write(X_teste_df.shape)        # Deve mostrar algo como (n_linhas, n_features)
+    st.write(X_teste_df.columns)      # Deve listar as colunas
 if __name__ == "__main__":
     main()

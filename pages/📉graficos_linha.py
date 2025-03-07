@@ -93,15 +93,17 @@ def main():
     st.markdown("---")
     st.subheader("Gráfico de Linha: pH vs Qualidade por Tipo de Vinho")
 
-    # Criar um DataFrame para o gráfico de linha
-    line_chart_data = df_selecionado.groupby(['Qualidade', 'tipo_vinho'])['pH'].mean().unstack().reset_index()
+    plt.figure(figsize=(10, 6), facecolor='lightgray')  # Cor de fundo da figura
+    ax = sns.lineplot(data=combined_df, x='Qualidade', y='pH', hue='tipo_vinho', marker='o', palette={'Branco': 'darkgray', 'Tinto': 'darkred'})
 
-    fig, ax = plt.subplots()
-    line_chart_data.set_index('Qualidade').plot(ax=ax, color={'Branco': 'lightgray', 'Tinto': 'darkred'})
-    ax.set_title("Média do pH por Qualidade dos Vinhos")
-    ax.set_xlabel("Qualidade")
-    ax.set_ylabel("pH")
-    st.pyplot(fig)
+        # Adicionar título e rótulos
+    plt.title('Relação entre Ph e Qualidade dos Vinhos', fontsize=16)
+    plt.xlabel('Qualidade', fontsize=14)
+    plt.ylabel('Ph', fontsize=14)
+    plt.xticks(range(3, 9))  # Ajustar os ticks do eixo x para as qualidades esperadas
+    plt.xlim(3, 8)  # Limitar o eixo x para que vá de 3 a 8
+    plt.grid(True)
+    st.pyplot(plt)
     st.caption("Vinhos Tintos: um pH mais baixo está associado a uma qualidade percebida como mais alta")
     st.caption("Vinhos Brancos: um pH mais alto pode estar relacionado a uma qualidade percebida como mais alta")
 
@@ -110,15 +112,17 @@ def main():
     st.subheader("Gráfico de Linha: Açúcar Residual vs Qualidade por Tipo de Vinho")
 
     # Criar um DataFrame para o gráfico de linha
-    line_chart_data = df_selecionado.groupby(['Qualidade', 'tipo_vinho'])['Açúcar residual'].mean().unstack().reset_index()
+    plt.figure(figsize=(10, 6), facecolor='lightgray')  # Cor de fundo da figura
+    ax = sns.lineplot(data=combined_df, x='Qualidade', y='Açúcar residual', hue='tipo_vinho', marker='o', palette={'Branco': 'darkgray', 'Tinto': 'darkred'})
 
-    # Exibir o gráfico de linha com cores específicas
-    fig, ax = plt.subplots()
-    line_chart_data.set_index('Qualidade').plot(ax=ax, color={'Branco': 'lightgray', 'Tinto': 'darkred'})
-    ax.set_title("Média do Açúcar Residual por Qualidade dos Vinhos")
-    ax.set_xlabel("Qualidade")
-    ax.set_ylabel("Açúcar Residual")
-    st.pyplot(fig)  
+        # Adicionar título e rótulos
+    plt.title('Relação entre Açúcar Residual e Qualidade dos Vinhos', fontsize=16)
+    plt.xlabel('Qualidade', fontsize=14)
+    plt.ylabel('Açúcar Residual', fontsize=14)
+    plt.xticks(range(3, 9))  # Ajustar os ticks do eixo x para as qualidades esperadas
+    plt.xlim(3, 8)  # Limitar o eixo x para que vá de 3 a 8
+    plt.grid(True)
+    st.pyplot(plt)
     st.caption("Vinhos Tintos: o acucar residual tende a se manter estavel nao afetando muito na percepção de qualidade")
     st.caption("Vinhos Brancos: a percepção de qualidade pode estar relacionada a niveis moderados de acucar , porem tentendo a diminuir conforme a qualidade aumenta ")
     
@@ -128,16 +132,17 @@ def main():
     st.subheader("Dióxido de Enxofre Livre x Qualidade")
 
     # Agrupar e calcular a média
-    so2_df = df_selecionado.groupby(['Qualidade', 'tipo_vinho'])['Dióxido de enxofre livre'].mean().unstack()
+    plt.figure(figsize=(10, 6), facecolor='lightgray')  # Cor de fundo da figura
+    ax = sns.lineplot(data=combined_df, x='Qualidade', y='Dióxido de enxofre livre', hue='tipo_vinho', marker='o', palette={'Branco': 'darkgray', 'Tinto': 'darkred'})
 
-    # Criar o gráfico de linhas
-    fig, ax = plt.subplots(figsize=(10, 6))
-    so2_df.plot(kind='line', marker='o', color={'Branco': 'lightgray', 'Tinto': 'darkred'}, ax=ax)
-    ax.set_xlabel('Qualidade')
-    ax.set_ylabel('Dióxido de Enxofre Livre')
-    ax.set_title('Média do Dióxido de Enxofre Livre por Qualidade e Tipo de Vinho')
-    ax.legend(title='Tipo de Vinho', labels=['Branco', 'Tinto'])
-    st.pyplot(fig)
+        # Adicionar título e rótulos
+    plt.title('Relação entre Dióxido de enxofre livre e Qualidade dos Vinhos', fontsize=16)
+    plt.xlabel('Qualidade', fontsize=14)
+    plt.ylabel('Dióxido de enxofre livre', fontsize=14)
+    plt.xticks(range(3, 9))  # Ajustar os ticks do eixo x para as qualidades esperadas
+    plt.xlim(3, 8)  # Limitar o eixo x para que vá de 3 a 8
+    plt.grid(True)
+    st.pyplot(plt)
     st.caption("Vinhos Tintos: um menor nível de dióxido de enxofre livre também pode estar associado a uma qualidade percebida como mais alta")
     st.caption("Vinhos Brancos: o nivel de dioxido de enxofre tende a ser estavel, porem niveis muito altos so mostram associados a uma qualidade percebida menor")
 
@@ -145,20 +150,20 @@ def main():
     st.markdown("---")
     st.subheader("Acidez fixa x Qualidade")
 
-    # Agrupar e calcular a média
-    so2_df = df_selecionado.groupby(['Qualidade', 'tipo_vinho'])['Acidez fixa'].mean().unstack()
+    plt.figure(figsize=(10, 6), facecolor='lightgray')  # Cor de fundo da figura
+    ax = sns.lineplot(data=combined_df, x='Qualidade', y='Acidez fixa', hue='tipo_vinho', marker='o', palette={'Branco': 'darkgray', 'Tinto': 'darkred'})
 
-    # Criar o gráfico de linhas
-    fig, ax = plt.subplots(figsize=(10, 6))
-    so2_df.plot(kind='line', marker='o', color={'Branco': 'lightgray', 'Tinto': 'darkred'}, ax=ax)
-    ax.set_xlabel('Qualidade')
-    ax.set_ylabel('Acidez fixa')
-    ax.set_title(' Media da Acidez fixa por Qualidade e Tipo de Vinho')
-    ax.legend(title='Tipo de Vinho', labels=['Branco', 'Tinto'])
-    st.pyplot(fig)
+        # Adicionar título e rótulos
+    plt.title('Relação entre Acidez fixa e Qualidade dos Vinhos', fontsize=16)
+    plt.xlabel('Qualidade', fontsize=14)
+    plt.ylabel('Acidez fixa', fontsize=14)
+    plt.xticks(range(3, 9))  # Ajustar os ticks do eixo x para as qualidades esperadas
+    plt.xlim(3, 8)  # Limitar o eixo x para que vá de 3 a 8
+    plt.grid(True)
+    st.pyplot(plt)
     st.caption("Vinhos Tintos: O ponto ideal de acidez pode variar mas tende a quanto mais alto melhor a qualidade percebida")
     st.caption("Vinhos Brancos: um menor nível de acidez fixa está associado a uma qualidade percebida como mais alta")
 
     
-    if __name__ == '__main__':
-        main() 
+if __name__ == '__main__':
+     main() 

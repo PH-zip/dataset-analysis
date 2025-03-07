@@ -126,7 +126,7 @@ def main():
     print(classification_report(y_teste, pred_final))
     
     with open('modelo_KNN.pkl', 'wb') as arquivo:
-        pickle.dump(RF, arquivo)
-
+        joblib.dump(knn_final, arquivo)
+    
 if __name__ == '__main__':
     main()
