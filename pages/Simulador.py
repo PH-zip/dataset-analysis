@@ -4,6 +4,9 @@ import joblib
 from sklearn.preprocessing import StandardScaler
 from imblearn.over_sampling import SMOTE
 
+
+st.sidebar.image("logo_vinho.jpg",  use_container_width=True )
+
 # Título do aplicativo
 st.title("Previsão da Qualidade do Vinho")
 
@@ -55,7 +58,7 @@ if st.button("Prever Qualidade do Vinho"):
         elif modelo_escolhido == "KNN":
             modelo = joblib.load('modelo_knn.pkl')
         elif modelo_escolhido == "XGBoost":
-            modelo = joblib.load('xgboost_model.pkl')
+            modelo = joblib.load('modelo_Xgboost.pkl')
         
         # Fazendo a previsão
         previsao = modelo.predict(dados_usuario_scaled)

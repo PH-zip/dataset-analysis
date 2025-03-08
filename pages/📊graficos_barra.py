@@ -10,8 +10,12 @@ def main():
         page_title="Vinícola",  # Nome da aba
         page_icon=":wine_glass:",  # Emoji de vinho para a aba
     )
-    st.title("Graficos de barras")
+    
+    st.sidebar.image("logo_vinho.jpg",  use_container_width=True )
 
+    
+    st.title("Graficos de barras")
+    
     # Caminho para o seu arquivo CSV e parquet
     red = conversor(R'Data\winequality-red.csv', R'Data\red.parquet')
     white = conversor(R'Data\df_white.csv', R'Data\white.parquet')

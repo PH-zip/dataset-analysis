@@ -10,6 +10,7 @@ import numpy as np
 # Configuração inicial do Streamlit
 st.set_page_config(page_title="Análise de Cluster de Vinhos")
 st.title("Análise de Cluster de Vinhos 🍷")
+st.sidebar.image("logo_vinho.jpg",  use_container_width=True )
 
 st.markdown("---")
 

@@ -10,6 +10,7 @@ def main():
         page_title="Vinícola",  # Nome da aba
         page_icon=":wine_glass:",  # Emoji de vinho para a aba
         )
+        st.sidebar.image("logo_vinho.jpg",  use_container_width=True )
 
         # Título e introdução
         st.title("Relacoes")

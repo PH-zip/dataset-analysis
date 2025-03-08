@@ -10,6 +10,8 @@ def main():
         page_title="Vinícola",  # Nome da aba
         page_icon=":wine_glass:",  # Emoji de vinho para a aba
     )
+    st.sidebar.image("logo_vinho.jpg",  use_container_width=True )
+
     st.title("Graficos de linhas")
 
     # Caminho para o seu arquivo CSV e parquet

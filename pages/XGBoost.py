@@ -7,6 +7,8 @@ from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, classification_report, confusion_matrix
 from sklearn.preprocessing import LabelEncoder
 import xgboost as xgb
+import joblib
+
 
 def load_and_preprocess_data(df):
     df = df.drop(columns=['Unnamed: 0', 'tipo_vinho'], errors='ignore')
@@ -50,6 +52,8 @@ def train_and_evaluate_model(df):
     
     # Acurácia
     accuracy = accuracy_score(y_teste, y_pred)
+    
+    joblib.dump(best_xgb, 'modelo_Xgboost.pkl')
     
     return accuracy, y_teste, y_pred
 
