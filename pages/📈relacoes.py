@@ -13,7 +13,7 @@ def main():
         st.sidebar.image("logo_vinho.jpg",  use_container_width=True )
 
         # Título e introdução
-        st.title("Relacoes")
+        st.title("Relação entre variáveis")
 
         # Caminho para o seu arquivo CSV e parquet
         red = conversor(R'Data\winequality-red.csv', R'Data\red.parquet')
@@ -54,38 +54,91 @@ def main():
         df_white.rename(columns=novos_nomes, inplace=True)
         df_red.rename(columns=novos_nomes, inplace=True)
 
-        # Barra lateral com filtros
-        st.sidebar.title("Local para Aplicar Filtros")
-
+                # Barra lateral com filtros
+        st.sidebar.title("Aplique Filtros Aqui")
+                        # Slider para selecionar intervalo de pH
         # Slider para selecionar intervalo de pH
         ph_min, ph_max = st.sidebar.slider(
                 "Selecione o intervalo de pH:",
-                min_value=2.74,  # Valor mínimo permitido
-                max_value=4.01,  # Valor máximo permitido
-                value=(2.74, 4.01),  # Intervalo inicial como tupla (min, max)
+                min_value=0.00,  # Valor mínimo permitido
+                max_value=combined_df['pH'].max(),  # Valor máximo permitido
+                value=(0.00, combined_df['pH'].max()),  # Intervalo inicial como tupla (min, max)
                 step=0.1
         )
 
         # Slider para selecionar intervalo de teor alcoólico
         alcohol_min, alcohol_max = st.sidebar.slider(
                 "Selecione o intervalo de teor alcoólico:",
-                min_value=8.4,  # Valor mínimo permitido
-                max_value=15.0,  # Valor máximo permitido
-                value=(8.4, 15.0),  # Intervalo inicial como tupla (min, max)
+                min_value=0.00,  # Valor mínimo permitido
+                max_value=combined_df['Álcool'].max(),  # Valor máximo permitido
+                value=(0.00, combined_df['Álcool'].max()),  # Intervalo inicial como tupla (min, max)
                 step=0.1
         )
 
-        # Checkbox para filtrar apenas vinhos tintos
+        # Slider para selecionar intervalo de teor de sulfatos
+        sulfatos_min, sulfatos_max = st.sidebar.slider(
+                "Selecione o intervalo de teor de sulfatos:",
+                min_value=0.00,  # Valor mínimo permitido
+                max_value=combined_df['Sulfatos'].max(),  # Valor máximo permitido
+                value=(0.00, combined_df['Sulfatos'].max()),  # Intervalo inicial como tupla (min, max)
+                step=0.1
+        )
+
+        # Slider para selecionar intervalo de teor de ácido cítrico
+        acido_citrico_min, acido_citrico_max = st.sidebar.slider(
+                "Selecione o intervalo de teor de ácido cítrico:",
+                min_value=0.00,  # Valor mínimo permitido
+                max_value=combined_df['Ácido cítrico'].max(),  # Valor máximo permitido
+                value=(0.00, combined_df['Ácido cítrico'].max()),  # Intervalo inicial como tupla (min, max)
+                step=0.01
+        )
+
+        # Slider para selecionar intervalo de teor de ácido clorídrico
+        acido_cloridrico_min, acido_cloridrico_max = st.sidebar.slider(
+                "Selecione o intervalo de teor de ácido clorídrico:",
+                min_value=0.00,  # Valor mínimo permitido
+                max_value=combined_df['Cloretos'].max(),  # Valor máximo permitido
+                value=(0.00, combined_df['Cloretos'].max()),  # Intervalo inicial como tupla (min, max)
+                step=0.01
+        )
+
+        # Slider para selecionar intervalo de teor de densidade
+        densidade_min, densidade_max = st.sidebar.slider(
+                "Selecione o intervalo de teor de densidade:",
+                min_value=0.00,  # Valor mínimo permitido
+                max_value=combined_df['Densidade'].max(),  # Valor máximo permitido
+                value=(0.00, combined_df['Densidade'].max()),  # Intervalo inicial como tupla (min, max)
+                step=0.001
+        )
+
+
+
+        # Slider para selecionar intervalo de teor de sulfatos totais
+        sulfatos_totais_min, sulfatos_totais_max = st.sidebar.slider(
+                "Selecione o intervalo de teor de sulfatos totais:",
+                min_value=0.00,  # Valor mínimo permitido
+                max_value=combined_df['Dióxido de enxofre total'].max(),  # Valor máximo permitido
+                value=(0.00, combined_df['Dióxido de enxofre total'].max()),  # Intervalo inicial como tupla (min, max)
+                step=0.01
+        )
+
+
+                # Checkbox para filtrar apenas vinhos tintos
         somente_vinhos_tintos = st.sidebar.checkbox("Apenas vinhos tintos")
 
-        # Checkbox para filtrar apenas vinhos brancos
+                # Checkbox para filtrar apenas vinhos brancos
         somente_vinhos_brancos = st.sidebar.checkbox("Apenas vinhos brancos")
 
-        # Aplicar filtros no DataFrame com base nos valores selecionados
+                # Aplicar filtros no DataFrame com base nos valores selecionados
         df_selecionado = combined_df[
-                (combined_df['pH'] >= ph_min) & (combined_df['pH'] <= ph_max) &
-                (combined_df['Álcool'] >= alcohol_min) & (combined_df['Álcool'] <= alcohol_max)
-        ]
+                (combined_df['pH'] >= ph_min) & (combined_df['pH'] <= ph_max) & 
+                (combined_df['Álcool'] >= alcohol_min) & (combined_df['Álcool'] <= alcohol_max) & 
+                (combined_df['Sulfatos'] >= sulfatos_min) & (combined_df['Sulfatos'] <= sulfatos_max) & 
+                (combined_df['Ácido cítrico'] >= acido_citrico_min) & (combined_df['Ácido cítrico'] <= acido_citrico_max) & 
+                (combined_df['Cloretos'] >= acido_cloridrico_min) & (combined_df['Cloretos'] <= acido_cloridrico_max) & 
+                (combined_df['Densidade'] >= densidade_min) & (combined_df['Densidade'] <= densidade_max) & 
+                (combined_df['Dióxido de enxofre total'] >= sulfatos_totais_min) & (combined_df['Dióxido de enxofre total'] <= sulfatos_totais_max) 
+                ]    
 
         # Filtrar por tipo de vinho se algum filtro foi ativado
         if somente_vinhos_tintos:
@@ -160,9 +213,9 @@ def main():
         #Criar um heatmap para mostrar a relação entre todas as categorias
         plt.figure(figsize=(12, 10), facecolor='lightgray')
         corr_matrix = numeric_df.corr()
-        sns.heatmap(corr_matrix, annot=False, cmap='YlGn', square=True)
+        sns.heatmap(corr_matrix, annot=False, cmap='Reds', square=True)
         plt.title('Correlação entre Categorias', fontsize=18)
         st.pyplot(plt)
-        st.caption("O heatmap mostra a relação entre todas as categorias, onde cores mais próximas do vermelho indicam uma correlação positiva e cores mais próximas do azul indicam uma correlação negativa.")
+        st.caption("O heatmap mostra a relação entre todas as categorias, onde cores mais próximas do vermelho indicam uma correlação positiva e cores mais próximas do branco indicam uma correlação negativa.")
 if __name__ == '__main__':
         main() 
