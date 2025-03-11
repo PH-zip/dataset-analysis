@@ -94,12 +94,20 @@ def main():
                 df_selecionado = df_selecionado[df_selecionado['tipo_vinho'] == 'Branco']
         st.markdown("---")
 
+        
+
+        # Adicione um título ao gráfico
+        plt.title('Matriz de Correlação')
+
+        # Exiba o gráfico
+        plt.show()
+
         # Criar uma tabela de contingência para ambos os tipos de vinho
         heatmap_data = combined_df.pivot_table(values='Acidez volátil', 
                                                 index='Qualidade', 
                                                 columns='tipo_vinho', 
                                                 aggfunc='mean')
-
+        
         # Criar o heatmap para ambos os tipos de vinho
         plt.figure(figsize=(10, 6), facecolor="lightgray")
         sns.heatmap(heatmap_data, cmap='coolwarm', annot=True, fmt=".2f", linewidths=.5)
@@ -125,7 +133,7 @@ def main():
         plt.grid(True)
         st.pyplot(plt)
         st.caption("Vinhos com maior teor alcoólico geralmente são associados a sabores mais intensos e equilibrados.")
-          # Exibir o gráfico no Streamlit
+        # Exibir o gráfico no Streamlit
         st.markdown("---")
 
         # Lmplot para Vinhos Brancos
@@ -138,11 +146,23 @@ def main():
                         hue='tipo_vinho', palette={'Branco': 'lightgray', 'Tinto': 'darkred'}, 
                         height=6, aspect=1.5)
 
-        # Título e rótulos
+        #Título e rótulos
         lmplot.figure.suptitle('Qualidade X Densidade - Vinhos Brancos e Tintos', fontsize=18)
         lmplot.set_axis_labels('Qualidade', 'Densidade')
         st.pyplot(lmplot.figure)
         st.caption( st.caption("Vinhos de alta qualidade geralmente apresentam uma densidade mais baixa, devido ao teor alcoólico mais elevado e à menor quantidade de açúcar residual"))
 
+
+        #Evita o erro de selecionar uma coluna de string
+        numeric_df = combined_df.select_dtypes(include=['int64', 'float64'])
+
+        numeric_df= numeric_df.drop(columns=['Unnamed: 0'])
+        #Criar um heatmap para mostrar a relação entre todas as categorias
+        plt.figure(figsize=(12, 10), facecolor='lightgray')
+        corr_matrix = numeric_df.corr()
+        sns.heatmap(corr_matrix, annot=False, cmap='YlGn', square=True)
+        plt.title('Correlação entre Categorias', fontsize=18)
+        st.pyplot(plt)
+        st.caption("O heatmap mostra a relação entre todas as categorias, onde cores mais próximas do vermelho indicam uma correlação positiva e cores mais próximas do azul indicam uma correlação negativa.")
 if __name__ == '__main__':
         main() 
