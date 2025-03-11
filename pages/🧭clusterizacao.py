@@ -6,6 +6,9 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.metrics import silhouette_score, silhouette_samples
 import numpy as np
+if not hasattr(np, 'bool8'):
+    np.bool8 = np.bool_
+import plotly.express as px
 
 # Configuração inicial do Streamlit
 st.set_page_config(page_title="Análise de Cluster de Vinhos")
@@ -192,24 +195,31 @@ st.pyplot(fig)  # Sem "use_container_width"
 
 st.markdown("---")
 
+
 # Mostrar dados estatísticos
-st.subheader("Estatísticas por Cluster")
+st.subheader("Estatísticas por Cluster (Normalizadas)")
 
-# Selecionar colunas numéricas (incluindo 'Cluster' se for numérica)
+# Selecionar colunas numéricas (excluindo 'Cluster')
 numeric_cols = df_combined.select_dtypes(include='number').columns.tolist()
+if 'Cluster' in numeric_cols:
+    numeric_cols.remove('Cluster')
 
-# Garantir que 'Cluster' está nas colunas numéricas
-if 'Cluster' not in numeric_cols:
-    numeric_cols.append('Cluster')
+# Calcular estatísticas brutas
+cluster_stats_raw = df_combined.groupby('Cluster')[numeric_cols].mean()
 
-# Calcular estatísticas
-cluster_stats = df_combined[numeric_cols].groupby('Cluster').mean()
-
-# Exibir com formatação
-st.dataframe(
-    cluster_stats.style.format("{:.2f}")
-    .background_gradient(cmap='Blues', axis=0)
-    .set_properties(**{'text-align': 'center'})
+# Normalização Z-score por coluna (variável)
+scaler = StandardScaler()
+cluster_stats_normalized = pd.DataFrame(
+    scaler.fit_transform(cluster_stats_raw),
+    index=cluster_stats_raw.index,
+    columns=cluster_stats_raw.columns
 )
 
 
+# Exibir com formatação
+st.dataframe(
+    cluster_stats_normalized.style.format("{:.2f}")
+    .background_gradient(cmap='Blues', axis=0, subset=pd.IndexSlice[:, numeric_cols])
+    .set_properties(**{'text-align': 'center'})
+    .hide(axis='index')
+)
