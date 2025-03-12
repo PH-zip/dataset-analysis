@@ -31,10 +31,10 @@ def main():
     
     
     st.title("Machine Learning")
-    st.header("Rain Forest")
+    st.header("Random Forest🌳")
 
     # Lendo o arquivo csv
-    df = pd.read_csv('Data\winequality_combined.csv')
+    df = pd.read_csv('Data/winequality_combined.csv')
 
     # Tirando as colunas de texto que bugam o dataset
     df = df.drop(columns=['Unnamed: 0', 'wine_type'])

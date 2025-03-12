@@ -16,8 +16,8 @@ def main():
         st.title("Relação entre variáveis")
 
         # Caminho para o seu arquivo CSV e parquet
-        red = conversor(R'Data\winequality-red.csv', R'Data\red.parquet')
-        white = conversor(R'Data\df_white.csv', R'Data\white.parquet')
+        red = conversor(R'Data/winequality-red.csv', R'Data/red.parquet')
+        white = conversor(R'Data/df_white.csv', R'Data/white.parquet')
 
         # Ler arquivos parquet
         

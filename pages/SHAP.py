@@ -48,21 +48,7 @@ def main():
     joblib.dump(scaler, 'scaler.pkl')
     joblib.dump(label_quality, 'label_encoder.pkl')
 
-    # Visualização da árvore de decisão
-    estimator = RF.estimators_[0]
-    plt.figure(figsize=(50, 30), dpi=100)
-    plot_tree(estimator,
-              feature_names=X.columns,
-              class_names=labels,
-              filled=True,
-              rounded=True,
-              proportion=True,
-              max_depth=2)
-    st.pyplot(plt)
 
-    # Métricas de avaliação
-    st.write("\nRelatório de Classificação:")
-    st.write(classification_report(y_teste, X_previsao_RF))
 
     # Modelo KNN
     X_treino_knn = scaler.fit_transform(X_treino)
@@ -75,12 +61,7 @@ def main():
         pred_i = knn.predict(X_teste_knn)
         taxa_erro.append(np.mean(pred_i != y_teste))
 
-    plt.figure(figsize=(20, 12))
-    plt.plot(range(1, 21), taxa_erro, linestyle='dashed', marker='o', markerfacecolor='red', markersize=10)
-    plt.title('Taxa de Erro por Geração')
-    plt.xlabel('Geração')
-    plt.ylabel('Taxa de Erro')
-    st.pyplot(plt)
+
 
     knn_final = KNeighborsClassifier(n_neighbors=18)
     knn_final.fit(X_treino_knn, y_treino)
