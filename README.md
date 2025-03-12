@@ -4,7 +4,7 @@ Este projeto tem como objetivo realizar uma análise exploratória de dados (EDA
 
 ## Dataset
 
-O dataset utilizado neste projeto pode ser encontrado no seguinte link: [Red Wine Quality Dataset](https://www.kaggle.com/datasets/uciml/red-wine-quality-cortez-et-al-2009/data). Ele contém várias características dos vinhos, como pH, teor alcoólico e qualidade, que são analisadas para entender melhor a relação entre essas variáveis.
+Os datasets utilizados neste projeto pode ser encontrado no seguinte link: [Red Wine Quality Dataset](https://www.kaggle.com/datasets/uciml/red-wine-quality-cortez-et-al-2009/data) e [White Wine Quality Dataset](https://www.kaggle.com/datasets/piyushagni5/white-wine-quality). Ambos possuem várias características dos vinhos, como pH, teor alcoólico e qualidade, que são analisadas para entender melhor a relação entre essas variáveis.
 
 ## Tecnologias Utilizadas
 
@@ -19,6 +19,10 @@ Este projeto foi desenvolvido utilizando as seguintes tecnologias:
 - [Numpy](https://numpy.org/ "Numpy"): Uma biblioteca para computação numérica em Python, que suporta arrays e matrizes.
 
 - [Scikit-learn](https://scikit-learn.org/ "Scikit-learn"): Uma biblioteca para aprendizado de máquina em Python, que fornece ferramentas para modelagem e pré-processamento de dados.
+
+- [Matplotlib](https://matplotlib.org/ "Matplotlib"): Uma biblioteca para criar gráficos em python. 
+
+- [imblearn](https://imbalanced-learn.org/stable/ "imblearn") Uma biblioteca para lidar com problemas de dados desbalanceados.
 
 
 ## Requisitos
