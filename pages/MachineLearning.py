@@ -143,20 +143,17 @@ def main():
     # Fazendo previsões
     pred_final = knn_final.predict(X_teste_knn)
 
-    # Avaliando o modelo
-    st.subheader("Visualização:")
-
-    # Exibindo a acurácia
-    acuracia = accuracy_score(y_teste, pred_final)
-    st.write(f"Acurácia: {acuracia:.2f}")
 
 
 
     # Curva ROC (imagem)
     st.header("Curva ROC - KNN")
     try:
+        # Exibindo a acurácia
+        acuracia = accuracy_score(y_teste, pred_final)
+        st.write(f"Acurácia: {acuracia:.2f}")
         roc_image = Image.open('curva_roc_knn.png')
-        st.image(roc_image, caption='Curva ROC - KNN', use_container_width=True)
+        st.image(roc_image, use_container_width=True)
     except FileNotFoundError:
         st.error("Imagem da curva ROC não encontrada. Gere a imagem primeiro.")
 
